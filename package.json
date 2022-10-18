@@ -2,13 +2,16 @@
   "name": "marble-seeds",
   "version": "0.0.0",
   "license": "MIT",
-  "scripts": {},
+  "scripts": {
+    "test-all": "nx run-many --target=test",
+    "test-affected": "nx affected --target=test"
+  },
   "private": true,
   "devDependencies": {
     "nx": "15.0.0",
     "standard": "^17.0.0"
   },
   "workspaces": [
-    "packages/*"
+    "packages/**/*"
   ]
 }

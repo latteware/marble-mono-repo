@@ -1,5 +1,15 @@
 const fs = require('fs').promises
 
+const DataItem = class {
+  constructor (data) {
+    this._data = data
+  }
+
+  toJSON () {
+    return this._data
+  }
+}
+
 const DataStore = class {
   constructor (config) {
     this._path = config && config.path ? `${config.path}.json` : null
@@ -12,7 +22,9 @@ const DataStore = class {
 
   async fetch () {
     const content = await fs.readFile(this._path, 'utf-8')
-    this._data = JSON.parse(content)
+
+    const items = JSON.parse(content).map(item => new DataItem(item))
+    this._data = items
   }
 
   async sync () {
@@ -24,7 +36,7 @@ const DataStore = class {
   transform (fn) {
     const data = fn(this._data)
 
-    this._data = data
+    // this._data = data
   }
 
   // Transform wrappers

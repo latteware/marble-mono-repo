@@ -10,9 +10,7 @@ describe('Fetch base', function () {
     await dataStore.fetch()
 
     const data = dataStore.toJSON()
-    expect(data).to.deep.equal([
-      { item: true },
-      { item: false }
-    ])
+    expect(data[0].toJSON()).to.deep.equal({ item: true })
+    expect(data[1].toJSON()).to.deep.equal({ item: false })
   })
 })

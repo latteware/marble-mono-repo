@@ -1,6 +1,5 @@
 /* global describe, expect, it */
-const RecordTape = require('../../index')
-
+const RecordTape = require('@marble-seeds/record-tape')
 const Task = require('@marble-seeds/task')
 
 const getPackageJsonTape = require('./fixtures/get-package-json-tape.json')
@@ -9,7 +8,7 @@ const clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
 }
 
-describe('Sample', function () {
+describe('Base', function () {
   it('Should have on boundary loaded at the start', async function () {
     // clone tapes
     const tape = new RecordTape(clone(getPackageJsonTape))

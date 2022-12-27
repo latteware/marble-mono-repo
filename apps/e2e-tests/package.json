@@ -1,0 +1,33 @@
+{
+  "name": "e2e-tests",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha tests/**/*.js",
+    "coverage": "nyc npm run test",
+    "coverage-report": "nyc  --reporter=html npm run test",
+    "lint": "standard"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latteware/marble-backend-module-template.git"
+  },
+  "author": "Siedrix",
+  "license": "MIT",
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "pre-commit": "^1.2.2",
+    "standard": "^17.0.0"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "dependencies": {
+    "@marble-seeds/record-tape": "^0.2.2",
+    "@marble-seeds/task": "^0.11.0"
+  }
+}

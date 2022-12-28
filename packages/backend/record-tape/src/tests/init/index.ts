@@ -1,6 +1,7 @@
-/* global describe, expect, it */
-const path = require('path')
-const RecordTape = require('../../index')
+/* global describe, it */
+import * as path from 'path'
+import { expect } from 'chai'
+import { RecordTape } from '../../index'
 
 const emptyPath = path.resolve('any')
 const tapePath = path.resolve(__dirname, '../fixtures/load')

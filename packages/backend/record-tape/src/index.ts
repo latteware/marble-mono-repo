@@ -1,16 +1,36 @@
-const fs = require('fs')
+import * as fs from 'fs'
 
-const testTape = require('./utils/test-tape')
+interface LogItem {
+  input: any[]
+  output: any
+  boundaries: any
+}
 
-const RecordTape = class RecordTape {
-  constructor (config = {}) {
-    this._path = config.path ? `${config.path}.json` : null
-    this._log = config.log || []
-    this._boundaries = config.boundaries || {}
+interface Config {
+  path?: string
+  log?: LogItem[]
+  boundaries?: any
+}
+
+interface Tape {
+  log: any[]
+  boundaries: any
+}
+
+export const RecordTape = class RecordTape {
+  _path: string | null
+  _mode: string
+  _boundaries: any
+  _log: LogItem[]
+
+  constructor (config: Config = {}) {
+    this._path = typeof config.path === 'string' ? `${config.path}.json` : null
+    this._log = config.log ?? []
+    this._boundaries = config.boundaries ?? {}
     this._mode = 'record'
   }
 
-  _formatData () {
+  _formatData (): Tape {
     return {
       log: this._log,
       boundaries: this._boundaries
@@ -18,46 +38,47 @@ const RecordTape = class RecordTape {
   }
 
   // Data functions
-  getData () {
+  getData (): Tape {
     return this._formatData()
   }
 
-  getLog () {
+  getLog (): any[] {
     return this._log
   }
 
-  getBoundaries () {
+  getBoundaries (): any {
     return this._boundaries
   }
 
-  getMode () {
+  getMode (): string {
     return this._mode
   }
 
-  setMode (mode) {
+  setMode (mode: string): void {
     this._mode = mode
   }
 
-  addLogItem (item) {
+  addLogItem (item): any {
     if (this._mode === 'replay') {
       return
     }
 
     if (
-      (item.input && item.output) ||
-      (item.input && item.error)
+      (typeof item.input !== 'undefined' && typeof item.output !== 'undefined') ||
+      (typeof item.input !== 'undefined' && typeof item.error !== 'undefined')
     ) {
       return this._log.push(item)
     }
   }
 
-  addBoundariesData (boundaries) {
+  addBoundariesData (boundaries: any): void {
     this._boundaries = boundaries
   }
 
-  addBoundaryItem (boundaryName, callData) {
+  addBoundaryItem (boundaryName: string, callData): void {
     const boundaries = this._boundaries
-    if (!boundaries[boundaryName]) {
+
+    if (typeof boundaries[boundaryName] === 'undefined') {
       boundaries[boundaryName] = []
     }
 
@@ -66,7 +87,7 @@ const RecordTape = class RecordTape {
     boundary.unshift(callData)
   }
 
-  recordFrom (task) {
+  recordFrom (task): void {
     // Add listner
     task._listener = async (logItem, boundaries) => {
       // Only update if mode is record
@@ -87,21 +108,13 @@ const RecordTape = class RecordTape {
     task.setBoundariesTapes(this._boundaries)
   }
 
-  replay ({ name, task }) {
-    testTape(name, this, task)
-  }
-
-  replayOnly ({ name, task }) {
-    testTape.only(name, this, task)
-  }
-
-  replaySkip ({ name, task }) {
-    testTape.skip(name, this, task)
-  }
-
   // Load save functions
-  async load () {
+  async load (): Promise<any> {
     const readFile = fs.promises.readFile
+
+    if (this._path === null) {
+      return
+    }
 
     let content, err
     try {
@@ -110,7 +123,7 @@ const RecordTape = class RecordTape {
       err = e
     }
 
-    if (err) {
+    if (typeof err !== 'undefined') {
       return
     }
 
@@ -122,7 +135,11 @@ const RecordTape = class RecordTape {
     return data
   }
 
-  loadSync () {
+  loadSync (): any {
+    if (this._path === null) {
+      return
+    }
+
     if (!fs.existsSync(this._path)) {
       return
     }
@@ -137,8 +154,9 @@ const RecordTape = class RecordTape {
     return data
   }
 
-  async save () {
-    if (!this._path) { return }
+  async save (): Promise<any> {
+    if (typeof this._path !== 'undefined') { return }
+
     const writeFile = fs.promises.writeFile
     const data = this._formatData()
     const content = JSON.stringify(data, null, 2)
@@ -148,8 +166,9 @@ const RecordTape = class RecordTape {
     return data
   }
 
-  saveSync () {
-    if (!this._path) { return }
+  saveSync (): any {
+    if (typeof this._path !== 'undefined') { return }
+
     const data = this._formatData()
     const content = JSON.stringify(data, null, 2)
 
@@ -158,5 +177,3 @@ const RecordTape = class RecordTape {
     return data
   }
 }
-
-module.exports = RecordTape

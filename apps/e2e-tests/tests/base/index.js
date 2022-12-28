@@ -1,5 +1,5 @@
 /* global describe, expect, it */
-const RecordTape = require('@marble-seeds/record-tape')
+const { RecordTape } = require('@marble-seeds/record-tape')
 const Task = require('@marble-seeds/task')
 
 const getPackageJsonTape = require('./fixtures/get-package-json-tape.json')

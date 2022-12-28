@@ -8,8 +8,7 @@
   },
   "private": true,
   "devDependencies": {
-    "nx": "15.0.0",
-    "standard": "^17.0.0"
+    "nx": "15.0.0"
   },
   "workspaces": [
     "packages/**/*",

@@ -1,13 +1,14 @@
-/* global describe, before, expect, it */
-const Schema = require('@marble-seeds/schema')
-const { types } = Schema
+/* global describe, before, it */
+import Schema = require('@marble-seeds/schema')
+import { expect } from 'chai'
+import { Task } from '../../index'
 
-const Task = require('../../index')
+const { types } = Schema
 
 describe('Validation tests', function () {
   let task
   before(() => {
-    const schema = {
+    const schema: { value: number } = {
       value: types.number.required()
     }
 
@@ -138,8 +139,8 @@ describe('Validation multiple values tests', function () {
 })
 
 describe('Get Schema', function () {
-  it('To string', async function () {
-    const add2 = new Task(function (int) {
+  it('Object as string', async function () {
+    const add2 = new Task(function (int: number) {
       return int + 2
     }, {
       validate: {
@@ -153,8 +154,8 @@ describe('Get Schema', function () {
     expect(seed).to.equal('{"value":{"type":"number","flags":{"presence":"required"}}}')
   })
 
-  it('To string', async function () {
-    const add2 = new Task(function (int) {
+  it('Epmty object as string', async function () {
+    const add2 = new Task(function (int: number) {
       return int + 2
     }, {})
 

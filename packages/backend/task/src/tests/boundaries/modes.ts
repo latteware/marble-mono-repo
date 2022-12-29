@@ -1,11 +1,12 @@
-/* global describe, expect, it */
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
 
 describe('Proxy mode', function () {
   // Proxy: execute the function and records it
   it('Should execute the boundary', async function () {
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -29,8 +30,8 @@ describe('Proxy pass mode', function () {
   // Proxy pass: review if the input exist, it it exist returns the previous value and if not execute the functions
   it('Should return value from record', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -58,8 +59,8 @@ describe('Proxy pass mode', function () {
 
   it('Should run boundary', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -90,8 +91,8 @@ describe('Proxy pass mode', function () {
   // Proxy-catch: executes the function and if it throws and error, it tries to use a previews output if it exists for the input.
   it('Should run boundary', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -119,8 +120,8 @@ describe('Proxy pass mode', function () {
 
   it('After boundary fails, should return value from record', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -151,8 +152,8 @@ describe('Replay mode', function () {
   // Replay: review if the input exist and if it doesnt throws and error.
   it('Should return value from record', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -180,8 +181,8 @@ describe('Replay mode', function () {
 
   it('Should fail if the input its not present', async function () {
     let i = 0
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {

@@ -1,9 +1,10 @@
-/* global describe, expect, it */
-const Boundary = require('../../utils/boundary')
+/* global describe, it */
+import { expect } from 'chai'
+import { createBoundery } from '../../utils/boundary'
 
 describe('Stand alone boundary tests', function () {
   it('Happy path case', async function () {
-    const identity = new Boundary(async function (argv) {
+    const identity = createBoundery(async function (argv) {
       return argv
     })
 
@@ -15,7 +16,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Happy path with multiple params case', async function () {
-    const add = new Boundary(async function (a, b) {
+    const add = createBoundery(async function (a: number, b: number) {
       return a + b
     })
 
@@ -27,8 +28,8 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Happy path with arguments case', async function () {
-    const add = new Boundary(async function () {
-      return [...arguments].reduce((a, b) => a + b, 0)
+    const add = createBoundery(async function (...args) {
+      return args.reduce((a: number, b: number) => a + b, 0)
     })
 
     const six = await add(3, 2, 1)
@@ -41,7 +42,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success one argument case', async function () {
-    const identity = new Boundary(async function (argv) {
+    const identity = createBoundery(async function (argv) {
       return argv
     })
 
@@ -59,7 +60,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success multiple argument case', async function () {
-    const add = new Boundary(async function (a, b) {
+    const add = createBoundery(async function (a: number, b: number) {
       return a + b
     })
 
@@ -77,8 +78,8 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success with arguments case', async function () {
-    const add = new Boundary(async function () {
-      return [...arguments].reduce((a, b) => a + b, 0)
+    const add = createBoundery(async function (...args) {
+      return args.reduce((a: number, b: number) => a + b, 0)
     })
 
     const six = await add(3, 2, 1)
@@ -98,8 +99,8 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with one argument case', async function () {
-    const identity = new Boundary(async function (argv) {
-      if (!argv.value) {
+    const identity = createBoundery(async function (argv: any) {
+      if (typeof argv.value === 'undefined') {
         throw new Error('Value is needed')
       }
 
@@ -127,7 +128,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with multiple argument case', async function () {
-    const add = new Boundary(async function (a, b) {
+    const add = createBoundery(async function (a, b) {
       if (typeof a !== 'number' || typeof b !== 'number') {
         throw new Error('Value is need to be a number')
       }
@@ -158,13 +159,13 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with arguments case', async function () {
-    const add = new Boundary(async function () {
-      const arr = [...arguments]
+    const add = createBoundery(async function (...args) {
+      const arr = args
       if (!arr.every(a => typeof a === 'number')) {
         throw new Error('Value is need to be a number')
       }
 
-      return [...arguments].reduce((a, b) => a + b, 0)
+      return args.reduce((a: number, b: number) => a + b, 0)
     })
 
     let emptyObject, error
@@ -195,7 +196,7 @@ describe('Stand alone boundary tests', function () {
 
 describe('Stand alone replay boundary tests', function () {
   it('Happy path case', async function () {
-    const identity = new Boundary(async function () {})
+    const identity = createBoundery(async function () {})
 
     identity.setTape([
       { input: [{}], output: {} },
@@ -211,7 +212,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('No tape value case', async function () {
-    const identity = new Boundary(async function () {})
+    const identity = createBoundery(async function () {})
 
     identity.setTape([
       { input: [{}], output: {} }
@@ -233,7 +234,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('Error as tape result case', async function () {
-    const identity = new Boundary(async function (argv) {})
+    const identity = createBoundery(async function (argv) {})
     identity.setTape([
       { input: [{}], error: 'Value is needed' },
       { input: [{ value: 5 }], output: { value: 5 } }

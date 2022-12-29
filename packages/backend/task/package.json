@@ -2,21 +2,25 @@
   "name": "@marble-seeds/task",
   "version": "0.11.0",
   "description": "",
-  "main": "index.js",
+  "main": "dist/index.js",
   "scripts": {
-    "test": "mocha tests/**/*.js",
+    "build": "tsc --declaration",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "standard"
+    "lint": "ts-standard -p tsconfig.json"
   },
   "author": "Siedrix",
   "license": "MIT",
   "devDependencies": {
+    "@types/mocha": "^10.0.1",
     "chai": "^4.3.6",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
-    "standard": "^17.0.0"
+    "ts-node": "^10.9.1",
+    "ts-standard": "^12.0.2",
+    "typescript": "^4.9.4"
   },
   "pre-commit": [
     "lint",
@@ -25,5 +29,8 @@
   "dependencies": {
     "@marble-seeds/schema": "^0.1.0",
     "minimist": "^1.2.6"
+  },
+  "ts-standard": {
+    "project": "./tsconfig.json"
   }
 }

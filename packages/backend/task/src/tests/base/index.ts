@@ -1,5 +1,6 @@
-/* global describe, expect, it */
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
 
 describe('Base test', function () {
   it('Indentity test', async function () {
@@ -15,7 +16,7 @@ describe('Base test', function () {
   })
 
   it('Add test', async function () {
-    const add2 = new Task(function (int) {
+    const add2 = new Task(function (int: number) {
       return int + 2
     })
 
@@ -27,13 +28,13 @@ describe('Base test', function () {
   })
 
   it('getMode proxy test', async function () {
-    const proxy = new Task(function (int) {
+    const proxy = new Task(function (int: number) {
       return int + 2
     }, {
       mode: 'proxy'
     })
 
-    const proxyPass = new Task(function (int) {
+    const proxyPass = new Task(function (int: number) {
       return int + 2
     }, {
       mode: 'proxy-pass'

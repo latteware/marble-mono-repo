@@ -1,5 +1,6 @@
-/* global describe, expect, it */
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
 
 // Need to add proxy cache mode to the boundaries
 describe('Boundaries tasks tests', function () {
@@ -48,8 +49,8 @@ describe('Boundaries tasks tests', function () {
   })
 
   it('Add task with boundaries test', async function () {
-    const add = new Task(async function (int, boundaries) {
-      const externalData = await boundaries.fetchExternalData(1)
+    const add = new Task(async function (int: number, boundaries) {
+      const externalData: number = await boundaries.fetchExternalData(1)
 
       return int + externalData
     }, {
@@ -68,8 +69,8 @@ describe('Boundaries tasks tests', function () {
   })
 
   it('Add task + boundaries + tape test', async function () {
-    const add = new Task(async function (int, boundaries) {
-      const externalData = await boundaries.fetchExternalData(int)
+    const add = new Task(async function (int: number, boundaries) {
+      const externalData: number = await boundaries.fetchExternalData(int)
 
       return int + externalData
     }, {

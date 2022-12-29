@@ -1,22 +1,21 @@
-/* global describe, expect, it */
-// const lov = require('lov')
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
+import { MockTape } from './fixtures/mock-tape'
 
-const getPackageJsonTape = require('./fixtures/get-package-json-tape.json')
-const emptyBounderiesTape = require('./fixtures/empty-bounderies-tape.json')
+import getPackageJsonTape from './fixtures/get-package-json-tape.json'
+import emptyBounderiesTape from './fixtures/empty-bounderies-tape.json'
 
-const clone = (obj) => {
+const clone = (obj: any): any => {
   return JSON.parse(JSON.stringify(obj))
 }
-
-const MockTape = require('./fixtures/mock-tape')
 
 describe('RecordFrom boundary tests', function () {
   it('Should have on boundary loaded at the start', async function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))
 
-    const task = new Task(function (argv) {
+    const task = new Task(function (argv: any) {
       return argv
     }, {
       boundaries: {
@@ -38,7 +37,7 @@ describe('RecordFrom boundary tests', function () {
     // clone tapes
     const mockTape = new MockTape(clone(emptyBounderiesTape))
 
-    const task = new Task(function (argv) {
+    const task = new Task(function (argv: any) {
       return argv
     }, {
       boundaries: {
@@ -59,7 +58,7 @@ describe('RecordFrom boundary tests', function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))
 
-    const task = new Task(async (argv, { getFileContent }) => {
+    const task = new Task(async (argv: any, { getFileContent }: any) => {
       await getFileContent(argv)
 
       return argv
@@ -92,7 +91,7 @@ describe('RecordFrom tape tests', function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))
 
-    const task = new Task(async (argv, { getFileContent }) => {
+    const task = new Task(async (argv: any, { getFileContent }: any) => {
       await getFileContent(argv)
 
       return argv
@@ -122,7 +121,7 @@ describe('RecordFrom tape tests', function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))
 
-    const task = new Task(async (argv, { getFileContent }) => {
+    const task = new Task(async (argv: any, { getFileContent }: any) => {
       await getFileContent(argv)
 
       return argv

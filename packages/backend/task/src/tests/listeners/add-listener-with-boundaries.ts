@@ -1,9 +1,10 @@
-/* global describe, expect, it */
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
 
 describe('Listener with boundaries tests', function () {
   it('Should be record one item and its boundaries tape', async function () {
-    const tape = []
+    const tape: any[] = []
     let boundariesTape = {}
 
     const task = new Task(async (argv, boundaries) => {
@@ -36,7 +37,7 @@ describe('Listener with boundaries tests', function () {
   })
 
   it('Should be record multiple item and its boundaries tape', async function () {
-    const tape = []
+    const tape: any[] = []
     let boundariesTape = {}
 
     const task = new Task(async (argv, boundaries) => {
@@ -75,12 +76,12 @@ describe('Listener with boundaries tests', function () {
   })
 
   it('Should be record error and its boundaries tape', async function () {
-    const tape = []
+    const tape: any[] = []
     let boundariesTape = {}
 
-    const task = new Task(async (argv, boundaries) => {
+    const task = new Task(async (argv: any, boundaries) => {
       const externalData = await boundaries.fetchExternalData()
-      if (!argv.value) {
+      if (typeof argv.value === 'undefined') {
         throw new Error('Value is required')
       }
 
@@ -113,12 +114,12 @@ describe('Listener with boundaries tests', function () {
   })
 
   it('Should be record error + success and its boundaries tape', async function () {
-    const tape = []
+    const tape: any[] = []
     let boundariesTape = {}
 
     const task = new Task(async (argv, boundaries) => {
       const externalData = await boundaries.fetchExternalData()
-      if (!argv.value) {
+      if (typeof argv.value === 'undefined') {
         throw new Error('Value is required')
       }
 

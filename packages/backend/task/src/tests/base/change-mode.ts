@@ -1,10 +1,11 @@
-/* global describe, expect, it */
-const Task = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
 
 describe('Change modes', function () {
   it('On task start, boundaries should start in the same mode', async function () {
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {
@@ -22,8 +23,8 @@ describe('Change modes', function () {
   })
 
   it('On task mode change, boundaries should change to the same', async function () {
-    const add = new Task(async (argv, { fetchIncrement }) => {
-      const increment = await fetchIncrement(argv)
+    const add = new Task(async (argv: { value: number }, { fetchIncrement }) => {
+      const increment: number = await fetchIncrement(argv)
 
       return argv.value + increment
     }, {

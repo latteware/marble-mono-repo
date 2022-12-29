@@ -1,12 +1,13 @@
-/* global describe, expect, it */
-const Schema = require('@marble-seeds/schema')
-const { types } = Schema
+/* global describe, it */
+import { expect } from 'chai'
+import { Task } from '../../index'
+import Schema = require('@marble-seeds/schema')
 
-const Task = require('../../index')
+const { types } = Schema
 
 describe('Listener tests', function () {
   it('Should be record one item', async function () {
-    const tape = []
+    const tape: any[] = []
     const task = new Task(function (argv) {
       return argv
     })
@@ -23,7 +24,7 @@ describe('Listener tests', function () {
   })
 
   it('Should be record execution error', async function () {
-    const tape = []
+    const tape: any[] = []
     const task = new Task(function (argv) {
       throw new Error('This should happen')
     })
@@ -42,7 +43,7 @@ describe('Listener tests', function () {
   })
 
   it('Should be record validation error', async function () {
-    const tape = []
+    const tape: any[] = []
     const task = new Task(function (argv) {
       return argv
     })
@@ -65,7 +66,7 @@ describe('Listener tests', function () {
   })
 
   it('Should be multiple records', async function () {
-    const tape = []
+    const tape: any[] = []
     const task = new Task(function (argv) {
       return argv
     })
@@ -86,7 +87,7 @@ describe('Listener tests', function () {
   })
 
   it('Should be stop record', async function () {
-    const tape = []
+    const tape: any[] = []
     const task = new Task(function (argv) {
       return argv
     })

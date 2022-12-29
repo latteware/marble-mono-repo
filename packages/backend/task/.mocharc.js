@@ -5,5 +5,5 @@ module.exports = {
   bail: false,
   slow: 1000,
   recursive: true,
-  file: ['./tests/helpers.js']
+  file: ['./src/tests/helpers.js']
 }

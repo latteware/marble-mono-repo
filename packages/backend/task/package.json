@@ -8,7 +8,7 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "standard"
+    "lint": "ts-standard -p tsconfig.json"
   },
   "author": "Siedrix",
   "license": "MIT",

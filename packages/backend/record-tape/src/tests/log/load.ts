@@ -1,6 +1,7 @@
-/* global describe, expect, it */
-const path = require('path')
-const RecordTape = require('../../index')
+/* global describe, it */
+import { expect } from 'chai'
+import path from 'path'
+import { RecordTape } from '../../index'
 
 describe('Load', function () {
   it('Load from file', async function () {

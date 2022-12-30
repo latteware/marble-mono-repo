@@ -1,5 +1,6 @@
-/* global describe, expect, it */
-const RecordTape = require('../../index')
+/* global describe, it */
+import { RecordTape } from '../../index'
+import { expect } from 'chai'
 
 describe('Log items', function () {
   it('Add successful log item', async function () {

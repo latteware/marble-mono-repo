@@ -6,33 +6,33 @@ describe('Log items', function () {
   it('Add successful log item', async function () {
     const tape = new RecordTape()
 
-    tape.addLogItem({
-      input: {},
+    tape.addLogItem('good run', {
+      input: [{}],
       output: {}
     })
 
-    const { log } = tape.getData()
+    const log = tape.getLog()
     expect(log.length).to.equal(1)
   })
 
   it('Add error log item', async function () {
     const tape = new RecordTape()
 
-    tape.addLogItem({
-      input: {},
+    tape.addLogItem('run error', {
+      input: [{}],
       error: new Error('sample error')
     })
 
-    const { log } = tape.getData()
+    const log = tape.getLog()
     expect(log.length).to.equal(1)
   })
 
   it('Should not record it on invalid log item', async function () {
     const tape = new RecordTape()
 
-    tape.addLogItem({})
+    // tape.addLogItem({ input: {} })
 
-    const { log } = tape.getData()
+    const log = tape.getLog()
     expect(log.length).to.equal(0)
   })
 })

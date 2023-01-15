@@ -130,13 +130,6 @@ export const RecordTape = class RecordTape {
       // Only update if mode is record
       if (this.getMode() === 'record') {
         this.addLogItem(name, logItem)
-
-        /*
-          Update save logic
-          - Should be an async update
-          - Probably marking tape as dirty and pass the save responsability to the tape owners
-        */
-        this.saveSync()
       }
     }
 

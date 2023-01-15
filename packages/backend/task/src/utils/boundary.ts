@@ -11,6 +11,10 @@ interface Boundary extends Function {
   setTape: Function
   getMode: Function
   setMode: Function
+
+  startRun: Function
+  stopRun: Function
+  getRunData: Function
 }
 
 const findRecord = (record, tape): any => {
@@ -30,85 +34,11 @@ const findRecord = (record, tape): any => {
   return result
 }
 
-export const createBoundery = function (fn): Boundary {
-  let tape: any[] = []
-  let mode = 'proxy'
-
-  // const action = async (...argv: any[]): Promise<any> => {
-  //   const record: Record = {
-  //     input: argv
-  //   }
-
-  //   if (mode === 'proxy-pass') {
-  //     const record = findRecord(argv, tape)
-
-  //     if (typeof record !== 'undefined') {
-  //       return await (async () => {
-  //         return record.output
-  //       })()
-  //     }
-  //   }
-
-  //   if (mode === 'replay') {
-  //     return await (async () => {
-  //       const record = findRecord(argv, tape)
-
-  //       if (typeof record === 'undefined') {
-  //         throw new Error('No tape value for this inputs')
-  //       }
-
-  //       if (typeof record.error !== 'undefined') {
-  //         throw new Error(record.error)
-  //       }
-
-  //       return record.output
-  //     })()
-  //   }
-
-  //   return await (async () => {
-  //     let result, error
-  //     try {
-  //       result = await fn(...argv)
-  //     } catch (e) {
-  //       error = e
-  //     }
-
-  //     if (typeof error !== 'undefined') {
-  //       const prevRecord: Record = findRecord(argv, tape)
-  //       if (mode === 'proxy-catch' && typeof prevRecord !== 'undefined') {
-  //         return await (async () => {
-  //           return prevRecord.output
-  //         })()
-  //       } else {
-  //         record.error = error.message
-  //         tape.push(record)
-
-  //         throw error
-  //       }
-  //     } else {
-  //       record.output = result
-  //       tape.push(record)
-
-  //       return result
-  //     }
-  //   })()
-  // }
-
-  // action.getTape = function () {
-  //   return tape
-  // }
-
-  // action.setTape = function (newTape) {
-  //   tape = newTape
-  // }
-
-  // action.getMode = function (newMode) {
-  //   return mode
-  // }
-
-  // action.setMode = function (newMode) {
-  //   mode = newMode
-  // }
+export const createBoundary = function (fn): Boundary {
+  let runLog: any[] = []
+  let cacheTape: any[] = []
+  let mode: string = 'proxy'
+  let hasRun: boolean = false
 
   const q = async (...argv): Promise<any> => {
     const record: Record = {
@@ -116,7 +46,7 @@ export const createBoundery = function (fn): Boundary {
     }
 
     if (mode === 'proxy-pass') {
-      const record = findRecord(argv, tape)
+      const record = findRecord(argv, cacheTape)
 
       if (typeof record !== 'undefined') {
         return await (async () => {
@@ -127,7 +57,7 @@ export const createBoundery = function (fn): Boundary {
 
     if (mode === 'replay') {
       return await (async () => {
-        const record = findRecord(argv, tape)
+        const record = findRecord(argv, cacheTape)
 
         if (typeof record === 'undefined') {
           throw new Error('No tape value for this inputs')
@@ -150,40 +80,60 @@ export const createBoundery = function (fn): Boundary {
       }
 
       if (typeof error !== 'undefined') {
-        const prevRecord: Record = findRecord(argv, tape)
+        const prevRecord: Record = findRecord(argv, cacheTape)
         if (mode === 'proxy-catch' && typeof prevRecord !== 'undefined') {
           return await (async () => {
             return prevRecord.output
           })()
         } else {
           record.error = error.message
-          tape.push(record)
+
+          if (hasRun) { runLog.push(record) }
+          cacheTape.push(record)
 
           throw error
         }
       } else {
         record.output = result
-        tape.push(record)
+
+        if (hasRun) { runLog.push(record) }
+        cacheTape.push(record)
 
         return result
       }
     })()
   }
 
+  // tape cache
   q.getTape = function () {
-    return tape
+    return cacheTape
   }
 
   q.setTape = function (newTape) {
-    tape = newTape
+    cacheTape = newTape
   }
 
+  // Mode
   q.getMode = function (newMode) {
     return mode
   }
 
   q.setMode = function (newMode) {
     mode = newMode
+  }
+
+  // run log
+  q.startRun = function (): void {
+    runLog = []
+    hasRun = true
+  }
+
+  q.stopRun = function (): void {
+    hasRun = false
+  }
+
+  q.getRunData = function (): any[] {
+    return runLog
   }
 
   return q

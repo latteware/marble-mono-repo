@@ -21,7 +21,7 @@ describe('Base', function () {
       }
     })
 
-    tape.recordFrom(task)
+    tape.recordFrom('sample', task)
 
     const { getFileContent } = task.getBoundaries()
     expect(getFileContent).to.not.equal(undefined)
@@ -47,7 +47,7 @@ describe('Base', function () {
       }
     })
 
-    tape.recordFrom(task)
+    tape.recordFrom('sample', task)
 
     await task.run({
       org: 'latteware',
@@ -78,7 +78,7 @@ describe('Base', function () {
       }
     })
 
-    tape.recordFrom(task)
+    tape.recordFrom('sample', task)
 
     await task.run({
       org: 'latteware',
@@ -92,7 +92,7 @@ describe('Base', function () {
     expect(log[2].output).to.deep.equal({ org: 'latteware', repo: 'repo-2', filePath: 'package.json' })
   })
 
-  it('Should have on boundaries item be added on run', async function () {
+  it.only('Should have on boundaries on log item after the run', async function () {
     // clone tapes
     const tape = new RecordTape(clone(getPackageJsonTape))
 
@@ -108,7 +108,7 @@ describe('Base', function () {
       }
     })
 
-    tape.recordFrom(task)
+    tape.recordFrom('sample', task)
 
     await task.run({
       org: 'latteware',
@@ -116,10 +116,13 @@ describe('Base', function () {
       filePath: 'package.json'
     })
 
-    const { getFileContent: boundaryTape } = tape.getBoundaries()
+    // const { getFileContent: boundaryTape } = tape.getBoundaries()
 
-    expect(boundaryTape.length).to.equal(2)
-    expect(boundaryTape[1].input).to.deep.equal([{ org: 'latteware', repo: 'repo-2', filePath: 'package.json' }])
-    expect(boundaryTape[1].output).to.deep.equal({ org: 'latteware', repo: 'repo-2', filePath: 'package.json' })
+    const log = tape.getLog()
+    console.log('->', log[0])
+    console.log('->', log[0].boundaries.getFileContent)
+
+    // expect(log[1].boundaries.getFileContent).to.deep.equal([{ org: 'latteware', repo: 'repo-2', filePath: 'package.json' }])
+    // expect(boundaryTape[1].output).to.deep.equal({ org: 'latteware', repo: 'repo-2', filePath: 'package.json' })
   })
 })

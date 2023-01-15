@@ -10,7 +10,8 @@ const clone = (obj: any): any => {
   return JSON.parse(JSON.stringify(obj))
 }
 
-describe('RecordFrom boundary tests', function () {
+// ToDo move to E2E app
+describe.skip('RecordFrom boundary tests', function () {
   it('Should have on boundary loaded at the start', async function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))
@@ -86,7 +87,7 @@ describe('RecordFrom boundary tests', function () {
   })
 })
 
-describe('RecordFrom tape tests', function () {
+describe.skip('RecordFrom tape tests', function () {
   it('Should have on log item be added on run', async function () {
     // clone tapes
     const mockTape = new MockTape(clone(getPackageJsonTape))

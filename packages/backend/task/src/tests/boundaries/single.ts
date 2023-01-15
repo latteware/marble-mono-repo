@@ -1,10 +1,10 @@
 /* global describe, it */
 import { expect } from 'chai'
-import { createBoundery } from '../../utils/boundary'
+import { createBoundary } from '../../utils/boundary'
 
 describe('Stand alone boundary tests', function () {
   it('Happy path case', async function () {
-    const identity = createBoundery(async function (argv) {
+    const identity = createBoundary(async function (argv) {
       return argv
     })
 
@@ -16,7 +16,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Happy path with multiple params case', async function () {
-    const add = createBoundery(async function (a: number, b: number) {
+    const add = createBoundary(async function (a: number, b: number) {
       return a + b
     })
 
@@ -28,7 +28,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Happy path with arguments case', async function () {
-    const add = createBoundery(async function (...args) {
+    const add = createBoundary(async function (...args) {
       return args.reduce((a: number, b: number) => a + b, 0)
     })
 
@@ -42,7 +42,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success one argument case', async function () {
-    const identity = createBoundery(async function (argv) {
+    const identity = createBoundary(async function (argv) {
       return argv
     })
 
@@ -60,7 +60,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success multiple argument case', async function () {
-    const add = createBoundery(async function (a: number, b: number) {
+    const add = createBoundary(async function (a: number, b: number) {
       return a + b
     })
 
@@ -78,7 +78,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save success with arguments case', async function () {
-    const add = createBoundery(async function (...args) {
+    const add = createBoundary(async function (...args) {
       return args.reduce((a: number, b: number) => a + b, 0)
     })
 
@@ -99,7 +99,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with one argument case', async function () {
-    const identity = createBoundery(async function (argv: any) {
+    const identity = createBoundary(async function (argv: any) {
       if (typeof argv.value === 'undefined') {
         throw new Error('Value is needed')
       }
@@ -128,7 +128,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with multiple argument case', async function () {
-    const add = createBoundery(async function (a, b) {
+    const add = createBoundary(async function (a, b) {
       if (typeof a !== 'number' || typeof b !== 'number') {
         throw new Error('Value is need to be a number')
       }
@@ -159,7 +159,7 @@ describe('Stand alone boundary tests', function () {
   })
 
   it('Save error with arguments case', async function () {
-    const add = createBoundery(async function (...args) {
+    const add = createBoundary(async function (...args) {
       const arr = args
       if (!arr.every(a => typeof a === 'number')) {
         throw new Error('Value is need to be a number')
@@ -196,7 +196,7 @@ describe('Stand alone boundary tests', function () {
 
 describe('Stand alone replay boundary tests', function () {
   it('Happy path case', async function () {
-    const identity = createBoundery(async function () {})
+    const identity = createBoundary(async function () {})
 
     identity.setTape([
       { input: [{}], output: {} },
@@ -212,7 +212,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('No tape value case', async function () {
-    const identity = createBoundery(async function () {})
+    const identity = createBoundary(async function () {})
 
     identity.setTape([
       { input: [{}], output: {} }
@@ -234,7 +234,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('Error as tape result case', async function () {
-    const identity = createBoundery(async function (argv) {})
+    const identity = createBoundary(async function (argv) {})
     identity.setTape([
       { input: [{}], error: 'Value is needed' },
       { input: [{ value: 5 }], output: { value: 5 } }

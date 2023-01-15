@@ -9,7 +9,7 @@ describe('Run boundary tests', function () {
     })
 
     identity.startRun()
-    const object = await identity({ value: 5 })
+    await identity({ value: 5 })
 
     const runTape = identity.getRunData()
 
@@ -22,7 +22,7 @@ describe('Run boundary tests', function () {
       return argv
     })
 
-    const object = await identity({ value: 5 })
+    await identity({ value: 5 })
 
     const runTape = identity.getRunData()
 
@@ -35,7 +35,7 @@ describe('Run boundary tests', function () {
     })
 
     identity.startRun()
-    const object = await identity({ value: 5 })
+    await identity({ value: 5 })
 
     identity.stopRun()
     await identity({ value: 5 })
@@ -52,7 +52,7 @@ describe('Run boundary tests', function () {
     })
 
     identity.startRun()
-    const object = await identity({ value: 4 })
+    await identity({ value: 4 })
     identity.stopRun()
 
     identity.startRun()

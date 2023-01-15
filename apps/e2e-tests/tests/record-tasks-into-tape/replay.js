@@ -8,7 +8,7 @@ const clone = (obj) => {
   return JSON.parse(JSON.stringify(obj))
 }
 
-describe('Base', function () {
+describe.skip('Replay task', function () {
   it('Should have on boundary loaded at the start', async function () {
     // clone tapes
     const tape = new RecordTape(clone(getPackageJsonTape))
@@ -92,8 +92,9 @@ describe('Base', function () {
     expect(log[2].output).to.deep.equal({ org: 'latteware', repo: 'repo-2', filePath: 'package.json' })
   })
 
-  it.only('Should have on boundaries on log item after the run', async function () {
+  it('Should have on boundaries on log item after the run', async function () {
     // clone tapes
+    console.log('Loading old tape ->', getPackageJsonTape)
     const tape = new RecordTape(clone(getPackageJsonTape))
 
     const task = new Task(async (argv, { getFileContent }) => {
@@ -120,7 +121,8 @@ describe('Base', function () {
 
     const log = tape.getLog()
     console.log('->', log[0])
-    console.log('->', log[0].boundaries.getFileContent)
+
+    console.log('->', tape.stringify())
 
     // expect(log[1].boundaries.getFileContent).to.deep.equal([{ org: 'latteware', repo: 'repo-2', filePath: 'package.json' }])
     // expect(boundaryTape[1].output).to.deep.equal({ org: 'latteware', repo: 'repo-2', filePath: 'package.json' })

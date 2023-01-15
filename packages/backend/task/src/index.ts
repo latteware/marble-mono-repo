@@ -189,7 +189,6 @@ export const Task = class Task {
     }
   }
 
-
   async run (argv: any): Promise<any> {
     // ToDo: have a better CLI handler, probably move of the task runner
     const cliArgs = parseArgs(process.argv.slice(2))

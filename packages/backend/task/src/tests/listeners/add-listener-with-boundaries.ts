@@ -5,7 +5,6 @@ import { Task } from '../../index'
 describe('Listener with boundaries tests', function () {
   it('Should be record one item and its boundaries tape', async function () {
     const tape: any[] = []
-    let boundariesTape = {}
 
     const task = new Task(async (argv, boundaries) => {
       const externalData = await boundaries.fetchExternalData()
@@ -37,7 +36,6 @@ describe('Listener with boundaries tests', function () {
 
   it('Should be record multiple item and its boundaries tape', async function () {
     const tape: any[] = []
-    let boundariesTape = {}
 
     const task = new Task(async (argv, boundaries) => {
       const externalData = await boundaries.fetchExternalData()
@@ -53,8 +51,6 @@ describe('Listener with boundaries tests', function () {
 
     task.addListener((record, newBoundariesTape) => {
       tape.push(record)
-
-      boundariesTape = newBoundariesTape
     })
 
     await task.run({ value: 5 })
@@ -206,10 +202,10 @@ describe('Listener with boundaries tests', function () {
       return counter
     }, {
       boundaries: {
-        add: async (value) => {
+        add: async (value: number): Promise<number> => {
           return value + 1
         },
-        subtract: async (value) => {
+        subtract: async (value: number): Promise<number> => {
           return value - 1
         }
       }

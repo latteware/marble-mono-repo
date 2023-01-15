@@ -1,0 +1,2 @@
+{"name":"test","type":"success","input":{"value":5},"output":{"filePath":"readme.md"},"boundaries":{"getFilePath":[{"input":[],"output":"readme.md"}]}}
+{"name":"test","type":"success","input":{"value":5},"output":{"filePath":"readme.md"},"boundaries":{"getFilePath":[{"input":[],"output":"readme.md"}]}}

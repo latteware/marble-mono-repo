@@ -7,7 +7,7 @@ interface TaskConfig {
   validate?: any
   mode?: string
   boundaries?: any
-  boundariesTape?: any
+  boundariesData?: any
 }
 
 export const Task = class Task {
@@ -18,7 +18,7 @@ export const Task = class Task {
 
   _boundariesDefinition: any
   _boundaries: any | null
-  _boundariesTapes: any | null
+  _boundariesData: any | null
 
   _schema: any | undefined
   _listener: Function | undefined
@@ -41,10 +41,10 @@ export const Task = class Task {
     this._coolDown = 1000
 
     // Review this assignment
-    this._boundariesTapes = conf.boundariesTape ?? {}
+    this._boundariesData = conf.boundariesData ?? {}
     this._boundaries = this._createBounderies({
       definition: this._boundariesDefinition,
-      baseData: this._boundariesTapes,
+      baseData: this._boundariesData,
       mode: this._mode
     })
   }
@@ -115,19 +115,32 @@ export const Task = class Task {
     return this._boundaries
   }
 
-  setBoundariesTapes (boundariesTape: { [x: string]: any }): void {
+  setBoundariesData (boundariesData: { [x: string]: any }): void {
     for (const name in this._boundaries) {
       const boundary = this._boundaries[name]
 
       let tape
-      if (typeof boundariesTape !== 'undefined') {
-        tape = boundariesTape[name]
+      if (typeof boundariesData !== 'undefined') {
+        tape = boundariesData[name]
       }
 
       if (typeof boundary !== 'undefined' && typeof tape !== 'undefined') {
         boundary.setTape(tape)
       }
     }
+  }
+
+  getBondariesData (): any {
+    const boundaries = this._boundaries
+    const boundariesData = {}
+
+    for (const name in boundaries) {
+      const boundary = boundaries[name]
+
+      boundariesData[name] = boundary.getTape()
+    }
+
+    return boundariesData
   }
 
   _createBounderies ({
@@ -151,19 +164,6 @@ export const Task = class Task {
     }
 
     return boundariesFns
-  }
-
-  getBondariesTape (): any {
-    const boundaries = this._boundaries
-    const boundariesTape = {}
-
-    for (const name in boundaries) {
-      const boundary = boundaries[name]
-
-      boundariesTape[name] = boundary.getTape()
-    }
-
-    return boundariesTape
   }
 
   getBondariesRunLog (): any {

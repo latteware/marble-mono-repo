@@ -33,7 +33,7 @@ describe('Boundaries tasks tests', function () {
       boundaries: {
         fetchExternalData: async () => {}
       },
-      boundariesTape: {
+      boundariesData: {
         fetchExternalData: [
           { input: [], output: { foo: false } }
         ]
@@ -79,7 +79,7 @@ describe('Boundaries tasks tests', function () {
           return int * 2
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchExternalData: [
           { input: [4], output: 2 }
         ]

@@ -5,3 +5,5 @@ node_modules
 # nyc/instanbul test coverage
 .nyc_output/
 coverage/
+
+tests/record-tasks-into-tape/fixtures/temp-log.log

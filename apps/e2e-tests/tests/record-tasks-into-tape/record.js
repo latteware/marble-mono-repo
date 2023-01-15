@@ -100,7 +100,7 @@ describe('Record from task', function () {
   })
 
   it('Should create fixture file', async function () {
-    const tapeFilePath = path.resolve(__dirname, './fixtures/simple-log')
+    const tapeFilePath = path.resolve(__dirname, './fixtures/temp-log')
     const tape = new RecordTape({ path: tapeFilePath })
 
     try {

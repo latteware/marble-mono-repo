@@ -94,6 +94,36 @@ export const RecordTape = class RecordTape {
     return log
   }
 
+  parse (content: string): LogRecord[] {
+    const items = content.split('\n')
+    const log: LogRecord[] = []
+
+    for (const item of items) {
+      if (item !== '') {
+        const data: LogRecord = JSON.parse(item)
+        log.push(data)
+      }
+    }
+
+    return log
+  }
+
+  compileCache (): any {
+    const cache: any = {}
+
+    for (const logIteam of this._log) {
+      for (const bondaryName in logIteam.boundaries) {
+        if (typeof cache[bondaryName] === 'undefined') {
+          cache[bondaryName] = logIteam.boundaries[bondaryName]
+        } else {
+          cache[bondaryName] = cache[bondaryName].concat(logIteam.boundaries[bondaryName])
+        }
+      }
+    }
+
+    return cache
+  }
+
   recordFrom (name, task): void {
     // Add listner
     task._listener = async (logItem, boundaries) => {
@@ -110,8 +140,8 @@ export const RecordTape = class RecordTape {
       }
     }
 
-    // Add boundaries tape
-    task.setBoundariesTapes(this._boundaries)
+    // Add cache
+    task.setBoundariesData(this.compileCache())
   }
 
   // Load save functions
@@ -130,19 +160,9 @@ export const RecordTape = class RecordTape {
       return
     }
 
-    const items = content.split('\n')
-    const log: LogRecord[] = []
+    this._log = this.parse(content)
 
-    for (const item of items) {
-      if (item !== '') {
-        const data: LogRecord = JSON.parse(item)
-        log.push(data)
-      }
-    }
-
-    this._log = log
-
-    return log
+    return this._log
   }
 
   loadSync (): any {
@@ -154,19 +174,9 @@ export const RecordTape = class RecordTape {
 
     const content = fs.readFileSync(this._path, 'utf8')
 
-    const items = content.split('\n')
-    const log: LogRecord[] = []
+    this._log = this.parse(content)
 
-    for (const item of items) {
-      if (item !== '') {
-        const data: LogRecord = JSON.parse(item)
-        log.push(data)
-      }
-    }
-
-    this._log = log
-
-    return log
+    return this._log
   }
 
   async save (): Promise<void> {

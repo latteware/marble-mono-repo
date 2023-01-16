@@ -6,7 +6,8 @@
   "scripts": {
     "build": "tsc --declaration",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
-    "lint": "ts-standard"
+    "lint": "ts-standard",
+    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",

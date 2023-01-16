@@ -32,6 +32,10 @@
     "url": "git+https://github.com/latteware/marble-mono-repo.git",
     "directory": "packages/backend/task"
   },
+  "bugs": {
+    "url": "https://github.com/latteware/marble-mono-repo/issues"
+  },
+  "homepage": "https://github.com/latteware/marble-mono-repo/tree/main/packages/backend/task#readme",
   "dependencies": {
     "@marble-seeds/schema": "^0.1.0",
     "minimist": "^1.2.6"

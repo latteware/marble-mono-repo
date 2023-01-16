@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/task",
-  "version": "0.11.0",
+  "version": "1.0.0-rc.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -26,6 +26,11 @@
     "lint",
     "test"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latteware/marble-mono-repo.git",
+    "directory": "packages/backend/task"
+  },
   "dependencies": {
     "@marble-seeds/schema": "^0.1.0",
     "minimist": "^1.2.6"

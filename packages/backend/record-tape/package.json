@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/record-tape",
-  "version": "0.2.2",
+  "version": "0.8.0-rc.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -10,7 +10,8 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/latteware/marble-backend-module-template.git"
+    "url": "git+https://github.com/latteware/marble-mono-repo.git",
+    "directory": "packages/backend/record-tape"
   },
   "author": "",
   "license": "ISC",

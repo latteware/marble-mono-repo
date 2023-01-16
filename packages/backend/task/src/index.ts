@@ -189,11 +189,14 @@ export const Task = class Task {
     }
   }
 
-  async run (argv: any): Promise<any> {
+  async run (argv: any | undefined): Promise<any> {
     // ToDo: have a better CLI handler, probably move of the task runner
-    const cliArgs = parseArgs(process.argv.slice(2))
-    delete cliArgs._
-    argv = argv ?? cliArgs
+    if (this._cli) {
+      const cliArgs = parseArgs(process.argv.slice(2))
+      delete cliArgs._
+
+      argv = cliArgs
+    }
     // End ToDo block
 
     // start run log

@@ -1,13 +1,13 @@
 import parseArgs from 'minimist'
 import Schema from '@marble-seeds/schema'
 
-import { createBoundery } from './utils/boundary'
+import { createBoundary } from './utils/boundary'
 
 interface TaskConfig {
   validate?: any
   mode?: string
   boundaries?: any
-  boundariesTape?: any
+  boundariesData?: any
 }
 
 export const Task = class Task {
@@ -17,8 +17,8 @@ export const Task = class Task {
   _coolDown: number
 
   _boundariesDefinition: any
+  _boundaries: any | null
   _boundariesData: any | null
-  _boundariesTapes: any | null
 
   _schema: any | undefined
   _listener: Function | undefined
@@ -41,10 +41,10 @@ export const Task = class Task {
     this._coolDown = 1000
 
     // Review this assignment
-    this._boundariesTapes = conf.boundariesTape ?? {}
-    this._boundariesData = this._createBounderies({
+    this._boundariesData = conf.boundariesData ?? {}
+    this._boundaries = this._createBounderies({
       definition: this._boundariesDefinition,
-      baseData: this._boundariesTapes,
+      baseData: this._boundariesData,
       mode: this._mode
     })
   }
@@ -54,8 +54,8 @@ export const Task = class Task {
   }
 
   setMode (mode: string): void {
-    for (const name in this._boundariesData) {
-      const boundary = this._boundariesData[name]
+    for (const name in this._boundaries) {
+      const boundary = this._boundaries[name]
 
       boundary.setMode(mode)
     }
@@ -104,29 +104,43 @@ export const Task = class Task {
   emit (data: any): void {
     if (typeof this._listener === 'undefined') { return }
 
-    this._listener(
-      data,
-      this._getBondaryTape(this._boundariesData)
-    )
+    const event = {
+      ...data, boundaries: this.getBondariesRunLog()
+    }
+
+    this._listener(event)
   }
 
   getBoundaries (): any {
-    return this._boundariesData
+    return this._boundaries
   }
 
-  setBoundariesTapes (boundariesTape: { [x: string]: any }): void {
-    for (const name in this._boundariesData) {
-      const boundary = this._boundariesData[name]
+  setBoundariesData (boundariesData: { [x: string]: any }): void {
+    for (const name in this._boundaries) {
+      const boundary = this._boundaries[name]
 
       let tape
-      if (typeof boundariesTape !== 'undefined') {
-        tape = boundariesTape[name]
+      if (typeof boundariesData !== 'undefined') {
+        tape = boundariesData[name]
       }
 
       if (typeof boundary !== 'undefined' && typeof tape !== 'undefined') {
         boundary.setTape(tape)
       }
     }
+  }
+
+  getBondariesData (): any {
+    const boundaries = this._boundaries
+    const boundariesData = {}
+
+    for (const name in boundaries) {
+      const boundary = boundaries[name]
+
+      boundariesData[name] = boundary.getTape()
+    }
+
+    return boundariesData
   }
 
   _createBounderies ({
@@ -137,7 +151,7 @@ export const Task = class Task {
     const boundariesFns = {}
 
     for (const name in definition) {
-      const boundary = createBoundery(definition[name])
+      const boundary = createBoundary(definition[name])
 
       if (typeof baseData !== 'undefined' && typeof baseData[name] !== 'undefined') {
         const tape = baseData[name]
@@ -152,16 +166,27 @@ export const Task = class Task {
     return boundariesFns
   }
 
-  _getBondaryTape (boundaries: { [x: string]: any }): any {
-    const boundariesTape = {}
+  getBondariesRunLog (): any {
+    const boundaries = this._boundaries
+    const boundariesRunLog = {}
 
     for (const name in boundaries) {
       const boundary = boundaries[name]
 
-      boundariesTape[name] = boundary.getTape()
+      boundariesRunLog[name] = boundary.getRunData()
     }
 
-    return boundariesTape
+    return boundariesRunLog
+  }
+
+  startRunLog (): void {
+    const boundaries = this._boundaries
+
+    for (const name in boundaries) {
+      const boundary = boundaries[name]
+
+      boundary.startRun()
+    }
   }
 
   async run (argv: any): Promise<any> {
@@ -171,7 +196,9 @@ export const Task = class Task {
     argv = argv ?? cliArgs
     // End ToDo block
 
-    const boundaries = this._boundariesData
+    // start run log
+    this.startRunLog()
+    const boundaries = this._boundaries
 
     const q = new Promise((resolve, reject) => {
       const error = this.validate(argv)

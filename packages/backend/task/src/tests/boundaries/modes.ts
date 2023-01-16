@@ -41,7 +41,7 @@ describe('Proxy pass mode', function () {
           return argv.value
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchIncrement: [
           { input: [{ value: 5 }], output: 5 }
         ]
@@ -70,7 +70,7 @@ describe('Proxy pass mode', function () {
           return argv.value
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchIncrement: [
           { input: [{ value: 6 }], output: 5 }
         ]
@@ -102,7 +102,7 @@ describe('Proxy pass mode', function () {
           return argv.value
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchIncrement: [
           { input: [{ value: 5 }], output: 5 }
         ]
@@ -131,7 +131,7 @@ describe('Proxy pass mode', function () {
           throw new Error('Something')
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchIncrement: [
           { input: [{ value: 5 }], output: 5 }
         ]
@@ -163,7 +163,7 @@ describe('Replay mode', function () {
           return argv.value
         }
       },
-      boundariesTape: {
+      boundariesData: {
         fetchIncrement: [
           { input: [{ value: 5 }], output: 5 }
         ]

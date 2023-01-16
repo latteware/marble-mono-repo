@@ -1,53 +1,60 @@
-import * as fs from 'fs'
+import fs from 'fs'
 
-interface LogItem {
+interface LogRecord {
+  name: string
+  type: 'success' | 'error'
   input: any[]
-  output: any
+
+  output?: any
+  error?: any
+
   boundaries: any
 }
 
-interface Config {
-  path?: string
-  log?: LogItem[]
+interface SuccessLogItem {
+  input: any[]
+  output: any
   boundaries?: any
 }
 
-interface Tape {
-  log: any[]
-  boundaries: any
+interface ErrorLogItem {
+  input: any[]
+  error: any
+  boundaries?: any
+}
+
+function isSuccessLogItem (log: SuccessLogItem | ErrorLogItem): log is SuccessLogItem {
+  return (log as SuccessLogItem).output !== undefined
+}
+
+function isErrorLogItem (log: SuccessLogItem | ErrorLogItem): log is ErrorLogItem {
+  return (log as ErrorLogItem).error !== undefined
+}
+
+type LogItem = SuccessLogItem | ErrorLogItem
+
+interface Config {
+  path?: fs.PathLike
+  log?: LogRecord[]
+  boundaries?: any
 }
 
 export const RecordTape = class RecordTape {
-  _path: string | null
+  _path: fs.PathLike | undefined
   _mode: string
   _boundaries: any
-  _log: LogItem[]
+  _log: LogRecord[]
 
   constructor (config: Config = {}) {
-    this._path = typeof config.path === 'string' ? `${config.path}.json` : null
+    this._path = typeof config.path === 'string' ? `${config.path}.log` : undefined
     this._log = config.log ?? []
     this._boundaries = config.boundaries ?? {}
     this._mode = 'record'
   }
 
-  _formatData (): Tape {
-    return {
-      log: this._log,
-      boundaries: this._boundaries
-    }
-  }
-
   // Data functions
-  getData (): Tape {
-    return this._formatData()
-  }
-
   getLog (): any[] {
     return this._log
-  }
-
-  getBoundaries (): any {
-    return this._boundaries
   }
 
   getMode (): string {
@@ -58,63 +65,82 @@ export const RecordTape = class RecordTape {
     this._mode = mode
   }
 
-  addLogItem (item): any {
+  addLogItem (name: string, logItem: LogItem): void {
     if (this._mode === 'replay') {
       return
     }
 
-    if (
-      (typeof item.input !== 'undefined' && typeof item.output !== 'undefined') ||
-      (typeof item.input !== 'undefined' && typeof item.error !== 'undefined')
-    ) {
-      return this._log.push(item)
+    if (isSuccessLogItem(logItem)) {
+      const { input, output, boundaries = {} } = logItem
+
+      this._log.push({ name, type: 'success', input, output, boundaries })
+    } else if (isErrorLogItem(logItem)) {
+      const { input, error, boundaries = {} } = logItem
+
+      this._log.push({ name, type: 'error', input, error, boundaries })
+    } else {
+      throw new Error('invalid log item')
     }
   }
 
-  addBoundariesData (boundaries: any): void {
-    this._boundaries = boundaries
-  }
+  stringify (): string {
+    let log = ''
 
-  addBoundaryItem (boundaryName: string, callData): void {
-    const boundaries = this._boundaries
-
-    if (typeof boundaries[boundaryName] === 'undefined') {
-      boundaries[boundaryName] = []
+    for (const logItem of this._log) {
+      const str = JSON.stringify(logItem)
+      log = log + str + '\n'
     }
 
-    // ToDo: implement clean up of repeated inputs
-    const boundary = boundaries[boundaryName]
-    boundary.unshift(callData)
+    return log
   }
 
-  recordFrom (task): void {
+  parse (content: string): LogRecord[] {
+    const items = content.split('\n')
+    const log: LogRecord[] = []
+
+    for (const item of items) {
+      if (item !== '') {
+        const data: LogRecord = JSON.parse(item)
+        log.push(data)
+      }
+    }
+
+    return log
+  }
+
+  compileCache (): any {
+    const cache: any = {}
+
+    for (const logIteam of this._log) {
+      for (const bondaryName in logIteam.boundaries) {
+        if (typeof cache[bondaryName] === 'undefined') {
+          cache[bondaryName] = logIteam.boundaries[bondaryName]
+        } else {
+          cache[bondaryName] = cache[bondaryName].concat(logIteam.boundaries[bondaryName])
+        }
+      }
+    }
+
+    return cache
+  }
+
+  recordFrom (name, task): void {
     // Add listner
     task._listener = async (logItem, boundaries) => {
       // Only update if mode is record
       if (this.getMode() === 'record') {
-        this.addLogItem(logItem)
-        this.addBoundariesData(boundaries)
-
-        /*
-          Update save logic
-          - Should be an async update
-          - Probably marking tape as dirty and pass the save responsability to the tape owners
-        */
-        this.saveSync()
+        this.addLogItem(name, logItem)
       }
     }
 
-    // Add boundaries tape
-    task.setBoundariesTapes(this._boundaries)
+    // Add cache
+    task.setBoundariesData(this.compileCache())
   }
 
   // Load save functions
   async load (): Promise<any> {
+    if (typeof this._path === 'undefined') { return }
     const readFile = fs.promises.readFile
-
-    if (this._path === null) {
-      return
-    }
 
     let content, err
     try {
@@ -127,18 +153,13 @@ export const RecordTape = class RecordTape {
       return
     }
 
-    const data = JSON.parse(content)
+    this._log = this.parse(content)
 
-    this._log = data.log
-    this._boundaries = data.boundaries
-
-    return data
+    return this._log
   }
 
   loadSync (): any {
-    if (this._path === null) {
-      return
-    }
+    if (typeof this._path === 'undefined') { return }
 
     if (!fs.existsSync(this._path)) {
       return
@@ -146,34 +167,25 @@ export const RecordTape = class RecordTape {
 
     const content = fs.readFileSync(this._path, 'utf8')
 
-    const data = JSON.parse(content)
+    this._log = this.parse(content)
 
-    this._log = data.log
-    this._boundaries = data.boundaries
-
-    return data
+    return this._log
   }
 
-  async save (): Promise<any> {
-    if (typeof this._path !== 'undefined') { return }
+  async save (): Promise<void> {
+    if (typeof this._path === 'undefined') { return }
 
     const writeFile = fs.promises.writeFile
-    const data = this._formatData()
-    const content = JSON.stringify(data, null, 2)
+    const content = this.stringify()
 
     await writeFile(this._path, content, 'utf8')
-
-    return data
   }
 
-  saveSync (): any {
-    if (typeof this._path !== 'undefined') { return }
+  saveSync (): void {
+    if (typeof this._path === 'undefined') { return }
 
-    const data = this._formatData()
-    const content = JSON.stringify(data, null, 2)
+    const content = this.stringify()
 
     fs.writeFileSync(this._path, content, 'utf8')
-
-    return data
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/task",
-  "version": "0.11.0",
+  "version": "1.0.0-rc.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "ts-standard -p tsconfig.json"
+    "lint": "ts-standard -p tsconfig.json",
+    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
   },
   "author": "Siedrix",
   "license": "MIT",
@@ -26,6 +27,15 @@
     "lint",
     "test"
   ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latteware/marble-mono-repo.git",
+    "directory": "packages/backend/task"
+  },
+  "bugs": {
+    "url": "https://github.com/latteware/marble-mono-repo/issues"
+  },
+  "homepage": "https://github.com/latteware/marble-mono-repo/tree/main/packages/backend/task#readme",
   "dependencies": {
     "@marble-seeds/schema": "^0.1.0",
     "minimist": "^1.2.6"

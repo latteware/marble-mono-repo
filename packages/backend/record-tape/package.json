@@ -1,23 +1,25 @@
 {
   "name": "@marble-seeds/record-tape",
-  "version": "0.2.2",
+  "version": "0.8.0-rc.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --declaration",
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
-    "lint": "ts-standard"
+    "lint": "ts-standard",
+    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/latteware/marble-backend-module-template.git"
+    "url": "git+https://github.com/latteware/marble-mono-repo.git",
+    "directory": "packages/backend/record-tape"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/latteware/marble-backend-module-template/issues"
+    "url": "https://github.com/latteware/marble-mono-repo/issues"
   },
-  "homepage": "https://github.com/latteware/marble-backend-module-template#readme",
+  "homepage": "https://github.com/latteware/marble-mono-repo/tree/main/packages/backend/task#readme",
   "dependencies": {
     "@marble-seeds/task": "^0.10.0"
   },

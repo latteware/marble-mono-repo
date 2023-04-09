@@ -1,52 +1,54 @@
 import * as assert from 'assert'
 
-interface Record {
-  input: any[]
-  output?: any
-  error?: string
-}
+type BaseBoundary = (...args: any[]) => any
 
-interface Boundary extends Function {
-  getTape: Function
-  setTape: Function
-  getMode: Function
-  setMode: Function
+type Mode = 'proxy' | 'proxy-pass' | 'proxy-catch' | 'replay'
 
-  startRun: Function
-  stopRun: Function
-  getRunData: Function
-}
+export const createBoundary = <Func extends BaseBoundary>(fn: Func): {
+  (...args: Parameters<Func>): Promise<ReturnType<Func>>
+  getTape: () => any[]
+  setTape: (newTape: any) => void
+  getMode: () => Mode
+  setMode: (newMode: Mode) => void
+  startRun: () => void
+  stopRun: () => void
+  getRunData: () => any[]
+} => {
+  interface Record {
+    input: Parameters<Func>
+    output?: any
+    error?: string
+  }
 
-const findRecord = (record, tape): any => {
-  const result = tape.find((item: any) => {
-    if (typeof item === 'undefined') { return false }
-
-    let error
-    try {
-      assert.deepEqual(record, item.input)
-    } catch (e) {
-      error = e
-    }
-
-    return typeof error === 'undefined'
-  })
-
-  return result
-}
-
-export const createBoundary = function (fn): Boundary {
-  let runLog: any[] = []
-  let cacheTape: any[] = []
-  let mode: string = 'proxy'
+  let runLog: Record[] = []
+  let cacheTape: Record[] = []
+  let mode: Mode = 'proxy'
   let hasRun: boolean = false
 
-  const q = async (...argv): Promise<any> => {
+  const wrappedFn = async (...args: Parameters<Func>): Promise<ReturnType<Func>> => {
+    const findRecord = (record: Parameters<Func>, tape: Record[]): Record | undefined => {
+      const result = tape.find((item: any) => {
+        if (typeof item === 'undefined') { return false }
+
+        let error
+        try {
+          assert.deepEqual(record, item.input)
+        } catch (e) {
+          error = e
+        }
+
+        return typeof error === 'undefined'
+      })
+
+      return result
+    }
+
     const record: Record = {
-      input: argv
+      input: args
     }
 
     if (mode === 'proxy-pass') {
-      const record = findRecord(argv, cacheTape)
+      const record = findRecord(args, cacheTape)
 
       if (typeof record !== 'undefined') {
         return await (async () => {
@@ -57,7 +59,7 @@ export const createBoundary = function (fn): Boundary {
 
     if (mode === 'replay') {
       return await (async () => {
-        const record = findRecord(argv, cacheTape)
+        const record = findRecord(args, cacheTape)
 
         if (typeof record === 'undefined') {
           throw new Error('No tape value for this inputs')
@@ -74,13 +76,13 @@ export const createBoundary = function (fn): Boundary {
     return await (async () => {
       let result, error
       try {
-        result = await fn(...argv)
+        result = await fn(...args)
       } catch (e) {
         error = e
       }
 
       if (typeof error !== 'undefined') {
-        const prevRecord: Record = findRecord(argv, cacheTape)
+        const prevRecord: Record | undefined = findRecord(args, cacheTape)
         if (mode === 'proxy-catch' && typeof prevRecord !== 'undefined') {
           return await (async () => {
             return prevRecord.output
@@ -105,36 +107,36 @@ export const createBoundary = function (fn): Boundary {
   }
 
   // tape cache
-  q.getTape = function () {
+  wrappedFn.getTape = function (): Record[] {
     return cacheTape
   }
 
-  q.setTape = function (newTape) {
+  wrappedFn.setTape = function (newTape): void {
     cacheTape = newTape
   }
 
   // Mode
-  q.getMode = function (newMode) {
+  wrappedFn.getMode = function (): Mode {
     return mode
   }
 
-  q.setMode = function (newMode) {
+  wrappedFn.setMode = function (newMode: Mode): void {
     mode = newMode
   }
 
   // run log
-  q.startRun = function (): void {
+  wrappedFn.startRun = function (): void {
     runLog = []
     hasRun = true
   }
 
-  q.stopRun = function (): void {
+  wrappedFn.stopRun = function (): void {
     hasRun = false
   }
 
-  q.getRunData = function (): any[] {
+  wrappedFn.getRunData = function (): Record[] {
     return runLog
   }
 
-  return q
+  return wrappedFn
 }

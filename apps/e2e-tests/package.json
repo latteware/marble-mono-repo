@@ -9,10 +9,6 @@
     "coverage-report": "nyc  --reporter=html npm run test",
     "lint": "standard"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/latteware/marble-backend-module-template.git"
-  },
   "author": "Siedrix",
   "license": "MIT",
   "devDependencies": {

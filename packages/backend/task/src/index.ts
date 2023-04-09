@@ -246,8 +246,6 @@ export const Task = class Task {
       })
     }
 
-    // return q
-
     const result = await q
 
     return result

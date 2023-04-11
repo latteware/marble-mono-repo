@@ -15,6 +15,24 @@ describe('Base test', function () {
     expect(foo).to.equal(true)
   })
 
+  it('Indentity typestest', async function () {
+    interface Indentity {
+      bar?: boolean
+      foo?: boolean
+    }
+    const calle = async function (argv: Indentity): Promise<Indentity> {
+      return argv
+    }
+
+    const indentity = new Task(calle)
+
+    const { bar } = await indentity.run({ bar: true })
+    const { foo } = await indentity.run({ foo: true })
+
+    expect(bar).to.equal(true)
+    expect(foo).to.equal(true)
+  })
+
   it('Add test', async function () {
     const add2 = new Task(function (int: number) {
       return int + 2

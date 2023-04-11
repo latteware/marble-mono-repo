@@ -3,6 +3,8 @@ import Schema from '@marble-seeds/schema'
 
 import { createBoundary } from './utils/boundary'
 
+type BaseFunction = (...args: any[]) => any
+
 interface TaskConfig {
   validate?: any
   mode?: string
@@ -10,8 +12,8 @@ interface TaskConfig {
   boundariesData?: any
 }
 
-export const Task = class Task {
-  _fn: Function
+export const Task = class Task<Func extends BaseFunction> {
+  _fn: Func
   _mode: string
   _cli: boolean
   _coolDown: number
@@ -23,7 +25,12 @@ export const Task = class Task {
   _schema: any | undefined
   _listener: Function | undefined
 
-  constructor (fn: Function, conf: TaskConfig = {}) {
+  constructor (fn: Func, conf: TaskConfig = {
+    validate: undefined,
+    mode: 'proxy',
+    boundaries: undefined,
+    boundariesData: undefined
+  }) {
     this._fn = fn
     // review how to add it in the same from on API and task
     this._schema = undefined
@@ -189,7 +196,7 @@ export const Task = class Task {
     }
   }
 
-  async run (argv: any | undefined): Promise<any> {
+  async run (argv: Parameters<Func>[0]): Promise<ReturnType<Func>> {
     // ToDo: have a better CLI handler, probably move of the task runner
     if (this._cli) {
       const cliArgs = parseArgs(process.argv.slice(2))
@@ -203,7 +210,7 @@ export const Task = class Task {
     this.startRunLog()
     const boundaries = this._boundaries
 
-    const q = new Promise((resolve, reject) => {
+    const q: Promise<ReturnType<Func>> = new Promise((resolve, reject) => {
       const error = this.validate(argv)
 
       if (typeof error !== 'undefined') {
@@ -215,7 +222,7 @@ export const Task = class Task {
         throw error
       }
 
-      (async (): Promise<any> => {
+      (async (): Promise<ReturnType<Func>> => {
         const outout = await this._fn(argv, boundaries)
 
         return outout

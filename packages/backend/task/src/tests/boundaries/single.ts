@@ -196,7 +196,7 @@ describe('Stand alone boundary tests', function () {
 
 describe('Stand alone replay boundary tests', function () {
   it('Happy path case', async function () {
-    const identity = createBoundary(async function () {})
+    const identity = createBoundary(async function (conf: any) {})
 
     identity.setTape([
       { input: [{}], output: {} },
@@ -212,7 +212,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('No tape value case', async function () {
-    const identity = createBoundary(async function () {})
+    const identity = createBoundary(async function (conf: any) {})
 
     identity.setTape([
       { input: [{}], output: {} }
@@ -234,7 +234,7 @@ describe('Stand alone replay boundary tests', function () {
   })
 
   it('Error as tape result case', async function () {
-    const identity = createBoundary(async function (argv) {})
+    const identity = createBoundary(async function (argv: any) {})
     identity.setTape([
       { input: [{}], error: 'Value is needed' },
       { input: [{ value: 5 }], output: { value: 5 } }

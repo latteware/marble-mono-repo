@@ -6,7 +6,8 @@ import { runner } from './index'
   const { action, taskName, args } = TaskRunner.getArgs()
 
   if (action === 'list') {
-    console.log(`Available tasks: ${runner.getTaskList().join(' ,')}`)
+    const listItems: string = runner.getTaskList().join(' ,')
+    console.log(`Available tasks: ${listItems}`)
   } else if (action === 'run') {
     await runner.run(taskName, args)
   } else if (action === 'clean-log') {

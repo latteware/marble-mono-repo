@@ -2,7 +2,6 @@ import parseArgs from 'minimist'
 import fs from 'fs/promises'
 import path from 'path'
 
-import { TaskInstanceType } from '@marble-seeds/task'
 import { RecordTape } from '@marble-seeds/record-tape'
 
 interface Props { [key: string]: any }
@@ -11,7 +10,7 @@ export const TaskRunner = class TaskRunner {
   public _folderName: string | null
   public _tasks: {
     [key: string]: {
-      task: TaskInstanceType
+      task: any
       tape?: any
     }
   }
@@ -59,7 +58,7 @@ export const TaskRunner = class TaskRunner {
     }
   }
 
-  getTask (name: string): TaskInstanceType | undefined {
+  getTask (name: string): any | undefined {
     const { task } = this._tasks[name]
 
     return task

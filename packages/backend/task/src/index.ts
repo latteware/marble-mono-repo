@@ -3,16 +3,34 @@ import Schema from '@marble-seeds/schema'
 
 import { createBoundary } from './utils/boundary'
 
-type BaseFunction = (...args: any[]) => any
+export type BaseFunction = (...args: any[]) => any
 
-interface TaskConfig {
+export interface TaskConfig {
   validate?: any
   mode?: string
   boundaries?: any
   boundariesData?: any
 }
 
-export const Task = class Task<Func extends BaseFunction> {
+export interface TaskInstanceType {
+  getMode(): string;
+  setMode(mode: string): void;
+  setCliHandlers(): void;
+  setSchema(base: any): void;
+  getSchema(): any;
+  validate(argv: any): any | undefined;
+  addListener(fn: Function): void;
+  removeListener(): void;
+  emit(data: any): void;
+  getBoundaries(): any;
+  setBoundariesData(boundariesData: { [x: string]: any }): void;
+  getBondariesData(): any;
+  getBondariesRunLog(): any;
+  startRunLog(): void;
+  run(argv: any): Promise<any>;
+}
+
+export const Task = class Task<Func extends BaseFunction> implements TaskInstanceType {
   _fn: Func
   _mode: string
   _cli: boolean
@@ -61,6 +79,7 @@ export const Task = class Task<Func extends BaseFunction> {
   }
 
   setMode (mode: string): void {
+    console.log(mode);
     for (const name in this._boundaries) {
       const boundary = this._boundaries[name]
 

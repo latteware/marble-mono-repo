@@ -1,0 +1,40 @@
+{
+  "name": "@marble-seeds/task-runner",
+  "version": "0.1.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --declaration",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
+    "coverage": "nyc npm run test",
+    "coverage-report": "nyc  --reporter=html npm run test",
+    "lint": "ts-standard -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latteware/marble-backend-module-template.git"
+  },
+  "author": "Siedrix",
+  "license": "MIT",
+  "dependencies": {
+    "@marble-seeds/record-tape": "0.8.0-rc.1",
+    "@marble-seeds/task": "*",
+    "minimist": "^1.2.8"
+  },
+  "devDependencies": {
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "pre-commit": "^1.2.2",
+    "ts-node": "^10.9.1",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.1.6"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "ts-standard": {
+    "project": "./tsconfig.json"
+  }
+}

@@ -4,7 +4,7 @@ import { Task } from '@marble-seeds/task'
 
 import { TaskRunner } from '../../index'
 
-describe('Sample', function () {
+describe('Base test', function () {
   it('Should run a task', async function () {
     const task = new Task(() => {
       return 'hi five!!!'

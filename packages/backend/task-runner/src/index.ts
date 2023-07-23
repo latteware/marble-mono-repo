@@ -8,11 +8,11 @@ import { RecordTape } from '@marble-seeds/record-tape'
 interface Props { [key: string]: any }
 
 export const TaskRunner = class TaskRunner {
-  public _folderName: string
+  public _folderName: string | null
   public _tasks: {
     [key: string]: {
       task: TaskInstanceType
-      tape: any
+      tape?: any
     }
   }
 
@@ -36,7 +36,7 @@ export const TaskRunner = class TaskRunner {
 
   constructor () {
     this._tasks = {}
-    this._folderName = ''
+    this._folderName = null
   }
 
   setTapeFolder (folderName: string): void {
@@ -44,16 +44,19 @@ export const TaskRunner = class TaskRunner {
   }
 
   load (name: string, task: any): void {
-    const tapePath = this._folderName + '/' + name
-    const tape = new RecordTape({
-      path: tapePath
-    })
-    tape.loadSync()
+    this._tasks[name] = { task }
 
-    tape.recordFrom('test', task)
-    task.tape = tape
+    if (this._folderName !== null) {
+      const tapePath = this._folderName + '/' + name
+      const tape = new RecordTape({
+        path: tapePath
+      })
+      tape.loadSync()
 
-    this._tasks[name] = { task, tape }
+      tape.recordFrom('test', task)
+      task.tape = tape
+      this._tasks[name].tape = tape
+    }
   }
 
   getTask (name: string): TaskInstanceType | undefined {
@@ -81,14 +84,19 @@ export const TaskRunner = class TaskRunner {
 
     const results = await task.run(args)
 
-    await tape.save()
+    if (this._folderName !== null) {
+      await tape.save()
+    }
 
     return results
   }
 
   async cleanLog (name: string): Promise<void> {
-    const tapePath = path.resolve(__dirname, `../../${this._folderName}/${name}.log`)
+    if (this._folderName === null) {
+      return
+    }
 
+    const tapePath = path.resolve(__dirname, `../../${this._folderName}/${name}.log`)
     await fs.unlink(tapePath)
   }
 }

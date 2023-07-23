@@ -13,21 +13,21 @@ export interface TaskConfig {
 }
 
 export interface TaskInstanceType {
-  getMode(): string;
-  setMode(mode: string): void;
-  setCliHandlers(): void;
-  setSchema(base: any): void;
-  getSchema(): any;
-  validate(argv: any): any | undefined;
-  addListener(fn: Function): void;
-  removeListener(): void;
-  emit(data: any): void;
-  getBoundaries(): any;
-  setBoundariesData(boundariesData: { [x: string]: any }): void;
-  getBondariesData(): any;
-  getBondariesRunLog(): any;
-  startRunLog(): void;
-  run(argv: any): Promise<any>;
+  getMode: () => string
+  setMode: (mode: string) => void
+  setCliHandlers: () => void
+  setSchema: (base: any) => void
+  getSchema: () => any
+  validate: (argv: any) => any | undefined
+  addListener: (fn: Function) => void
+  removeListener: () => void
+  emit: (data: any) => void
+  getBoundaries: () => any
+  setBoundariesData: (boundariesData: { [x: string]: any }) => void
+  getBondariesData: () => any
+  getBondariesRunLog: () => any
+  startRunLog: () => void
+  run: (argv: any) => Promise<any>
 }
 
 export const Task = class Task<Func extends BaseFunction> implements TaskInstanceType {
@@ -79,7 +79,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
   }
 
   setMode (mode: string): void {
-    console.log(mode);
+    console.log(mode)
     for (const name in this._boundaries) {
       const boundary = this._boundaries[name]
 

@@ -34,6 +34,7 @@
     "project": "./tsconfig.json"
   },
   "dependencies": {
+    "@marble-seeds/api": "*",
     "@marble-seeds/record-tape": "*",
     "@marble-seeds/task": "*",
     "@marble-seeds/task-runner": "*"

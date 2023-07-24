@@ -1,8 +1,8 @@
-import lov from 'lov'
 import _ from 'lodash'
 import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
 
+import Schema from '@marble-seeds/schema'
 export interface RouteType {
   _isRoute: boolean
   _isRouter: boolean
@@ -40,11 +40,14 @@ export class Route {
 
     this.method = this.options.method ?? 'get'
     this.path = this.options.path
-    this.validator = this.options.validator
     this.handler = this.options.handler
     this.priority = this.options.priority ?? 1
     this.middlewares = this.options.middlewares ?? []
     this.bodySize = this.options.bodySize ?? '1mb'
+
+    if (this.options.validator !== undefined) {
+      this.validator = new Schema(this.options.validator)
+    }
   }
 
   add (app: any): void {
@@ -77,14 +80,17 @@ export class Route {
 
     rtr[method](path.replace(/\/$/, ''), async function (ctx) {
       if (validator !== undefined) {
-        let validate = ctx.request.body
+        let argv = ctx.request.body
         if (method === 'get') {
-          validate = ctx.request.query
+          argv = ctx.request.query
         }
-        const result = lov.validate(validate, validator)
 
-        if (result.error !== undefined) {
-          return ctx.throw(422, result.error.message)
+        const error = validator.validate(argv)
+
+        if (error !== undefined) {
+          const err = error.details[0]
+
+          return ctx.throw(422, err.message)
         }
       }
 

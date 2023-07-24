@@ -5,9 +5,9 @@ export default async function (ctx, next): Promise<void> {
     await next()
   } catch (err) {
     ctx.body = { message: err.message }
-    ctx.status = err.status ?? '500'
+    ctx.status = err.status ?? 500
 
-    if (ctx.status === '500') {
+    if (ctx.status === 500) {
       console.error('=>', err.message, err)
     }
   }

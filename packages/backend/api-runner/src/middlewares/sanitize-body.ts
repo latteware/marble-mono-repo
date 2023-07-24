@@ -1,12 +1,12 @@
 import traverse from 'traverse'
 
-function tvs (obj: any) {
+function tvs (obj: any): any {
   if (!(obj instanceof Object)) {
     return obj
   }
 
   return traverse(obj).map(function (x) {
-    if (this.key && this.key !== this.key.replace(/\./g, '')) {
+    if (typeof this.key === 'string' && this.key !== this.key.replace(/\./g, '')) {
       const key = this.key
 
       this.key = this.key.replace(/\./g, '')
@@ -21,11 +21,11 @@ function tvs (obj: any) {
   })
 }
 
-export default async function (ctx, next) {
+export default async function (ctx, next): Promise<void> {
   const headers = ctx.request.headers
   let body = ctx.request.body
 
-  if (headers['content-type'] && headers['content-type'] === 'application/json') {
+  if (headers['content-type'] !== undefined && headers['content-type'] === 'application/json') {
     body = tvs(ctx.request.body)
   }
 

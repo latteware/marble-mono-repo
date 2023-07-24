@@ -20,7 +20,7 @@ describe('server base tests', function () {
   })
 
   it.skip('/api/status should return 200', async function () {
-    const srv = server()
+    // const srv = server()
 
     // const route = new Route({
     //   method: 'get',
@@ -48,4 +48,3 @@ describe('server base tests', function () {
     // })
   })
 })
-

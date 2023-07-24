@@ -1,0 +1,51 @@
+{
+  "name": "@marble-seeds/api",
+  "version": "0.3.0",
+  "description": "",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc --declaration",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
+    "coverage": "nyc npm run test",
+    "coverage-report": "nyc  --reporter=html npm run test",
+    "lint": "ts-standard -p tsconfig.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:latteware/marble-mono-repo.git",
+    "directory": "packages/backend/api-runner"
+  },
+  "author": "Siedrix",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.6",
+    "chai-http": "^4.4.0",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "pre-commit": "^1.2.2",
+    "ts-node": "^10.9.1",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.1.6"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "ts-standard": {
+    "project": "./tsconfig.json"
+  },
+  "dependencies": {
+    "@koa/cors": "^4.0.0",
+    "@types/koa__router": "^12.0.0",
+    "debug": "^4.3.4",
+    "koa": "^2.14.2",
+    "koa-bodyparser": "^4.4.1",
+    "koa-logger": "^3.2.1",
+    "koa-remove-trailing-slashes": "^2.0.3",
+    "koa-router": "^12.0.0",
+    "lodash": "^4.17.21",
+    "lov": "^1.3.1",
+    "traverse": "^0.6.7"
+  }
+}

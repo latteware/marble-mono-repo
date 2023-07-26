@@ -1,13 +1,15 @@
 import parseArgs from 'minimist'
-import fs from 'fs/promises'
+import fs from 'fs'
 import path from 'path'
 
 import { RecordTape } from '@marble-seeds/record-tape'
 
+const fsPromises = fs.promises
+
 interface Props { [key: string]: any }
 
 export const TaskRunner = class TaskRunner {
-  public _folderName: string | null
+  public _folderPath: fs.PathLike | null
   public _tasks: {
     [key: string]: {
       task: any
@@ -35,18 +37,37 @@ export const TaskRunner = class TaskRunner {
 
   constructor () {
     this._tasks = {}
-    this._folderName = null
+    this._folderPath = null
   }
 
-  setTapeFolder (folderName: string): void {
-    this._folderName = folderName
+  setTapeFolderSync (folderName: fs.PathLike): void {
+    try {
+      const data = fs.accessSync(folderName)
+      console.log('Here?', data)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
+
+    this._folderPath = folderName
+  }
+
+  async setTapeFolder (folderName: fs.PathLike): Promise<fs.PathLike> {
+    try {
+      await fsPromises.access(folderName)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
+
+    this._folderPath = folderName
+
+    return folderName
   }
 
   load (name: string, task: any): void {
     this._tasks[name] = { task }
 
-    if (this._folderName !== null) {
-      const tapePath = this._folderName + '/' + name
+    if (this._folderPath !== null) {
+      const tapePath = this._folderPath + '/' + name
       const tape = new RecordTape({
         path: tapePath
       })
@@ -83,7 +104,7 @@ export const TaskRunner = class TaskRunner {
 
     const results = await task.run(args)
 
-    if (this._folderName !== null) {
+    if (this._folderPath !== null) {
       await tape.save()
     }
 
@@ -91,11 +112,11 @@ export const TaskRunner = class TaskRunner {
   }
 
   async cleanLog (name: string): Promise<void> {
-    if (this._folderName === null) {
+    if (this._folderPath === null) {
       return
     }
 
-    const tapePath = path.resolve(__dirname, `../../${this._folderName}/${name}.log`)
-    await fs.unlink(tapePath)
+    const tapePath = path.resolve(__dirname, `../../${this._folderPath}/${name}.log`)
+    await fsPromises.unlink(tapePath)
   }
 }

@@ -5,7 +5,7 @@ import { parseEmail } from './tasks/parse-email'
 
 const runner = new TaskRunner()
 
-runner.setTapeFolder('./logs')
+runner.setTapeFolderSync('./logs')
 runner.load('fetch-json', fetchJSON)
 runner.load('parse-email', parseEmail)
 

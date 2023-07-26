@@ -43,7 +43,6 @@ export const TaskRunner = class TaskRunner {
   setTapeFolderSync (folderName: fs.PathLike): void {
     try {
       const data = fs.accessSync(folderName)
-      console.log('Here?', data)
     } catch (error) {
       throw new Error('Folder doesn\'t exists')
     }

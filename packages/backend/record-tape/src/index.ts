@@ -1,4 +1,5 @@
 import fs from 'fs'
+import path from 'path'
 
 interface LogRecord {
   name: string
@@ -139,6 +140,17 @@ export const RecordTape = class RecordTape {
 
   // Load save functions
   async load (): Promise<any> {
+    if (typeof this._path === 'undefined') {
+      return
+    }
+
+    const dirpath = path.dirname(this._path as string)
+    try {
+      await fs.promises.access(dirpath)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
+
     if (typeof this._path === 'undefined') { return }
     const readFile = fs.promises.readFile
 
@@ -161,6 +173,13 @@ export const RecordTape = class RecordTape {
   loadSync (): any {
     if (typeof this._path === 'undefined') { return }
 
+    const dirpath = path.dirname(this._path as string)
+    try {
+      fs.accessSync(dirpath)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
+
     if (!fs.existsSync(this._path)) {
       return
     }
@@ -175,6 +194,13 @@ export const RecordTape = class RecordTape {
   async save (): Promise<void> {
     if (typeof this._path === 'undefined') { return }
 
+    const dirpath = path.dirname(this._path as string)
+    try {
+      await fs.promises.access(dirpath)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
+
     const writeFile = fs.promises.writeFile
     const content = this.stringify()
 
@@ -183,6 +209,13 @@ export const RecordTape = class RecordTape {
 
   saveSync (): void {
     if (typeof this._path === 'undefined') { return }
+
+    const dirpath = path.dirname(this._path as string)
+    try {
+      fs.accessSync(dirpath)
+    } catch (error) {
+      throw new Error('Folder doesn\'t exists')
+    }
 
     const content = this.stringify()
 

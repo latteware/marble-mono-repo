@@ -2,4 +2,6 @@
 dist
 node_modules
 
+## Test logs for files that dont exist
 tests/fixtures/save.log
+tests/fixtures/nop.log

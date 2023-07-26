@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import { Task } from '@marble-seeds/task'
 
-import { TaskRunner } from '../../index'
+import { TaskRunner } from '../../src/index'
 
 describe('Base test', function () {
   it('Should run a task', async function () {

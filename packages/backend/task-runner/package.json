@@ -1,14 +1,16 @@
 {
   "name": "@marble-seeds/task-runner",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
     "build": "tsc --declaration",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "ts-standard -p tsconfig.json"
+    "lint": "ts-standard -p tsconfig.eslint.json",
+    "lint:fix": "ts-standard --fix --project tsconfig.eslint.json",
+    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
   },
   "repository": {
     "type": "git",
@@ -17,12 +19,16 @@
   "author": "Siedrix",
   "license": "MIT",
   "dependencies": {
-    "@marble-seeds/record-tape": "0.8.0-rc.1",
+    "@marble-seeds/record-tape": "0.8.0-rc.3",
     "@marble-seeds/task": "1.0.0-rc.5",
     "minimist": "^1.2.8"
   },
   "devDependencies": {
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.62.0",
     "chai": "^4.3.6",
+    "eslint": "^8.45.0",
+    "eslint-config-standard-with-typescript": "^37.0.0",
     "mocha": "^10.0.0",
     "nyc": "^15.1.0",
     "pre-commit": "^1.2.2",
@@ -35,6 +41,6 @@
     "test"
   ],
   "ts-standard": {
-    "project": "./tsconfig.json"
+    "project": "./tsconfig.eslint.json"
   }
 }

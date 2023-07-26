@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/record-tape",
-  "version": "0.8.0-rc.2",
+  "version": "0.8.0-rc.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {

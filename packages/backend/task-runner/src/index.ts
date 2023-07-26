@@ -67,7 +67,7 @@ export const TaskRunner = class TaskRunner {
     this._tasks[name] = { task }
 
     if (this._folderPath !== null) {
-      const tapePath = this._folderPath + '/' + name
+      const tapePath = this._folderPath as string + '/' + name
       const tape = new RecordTape({
         path: tapePath
       })
@@ -116,7 +116,7 @@ export const TaskRunner = class TaskRunner {
       return
     }
 
-    const tapePath = path.resolve(__dirname, `../../${this._folderPath}/${name}.log`)
+    const tapePath = path.resolve(__dirname, `../../${this._folderPath as string}/${name}.log`)
     await fsPromises.unlink(tapePath)
   }
 }

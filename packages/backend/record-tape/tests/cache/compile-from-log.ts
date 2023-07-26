@@ -1,7 +1,7 @@
 /* global describe, it */
 import * as path from 'path'
 import { expect } from 'chai'
-import { RecordTape } from '../../index'
+import { RecordTape } from '../../src/index'
 
 const simpleTapePath = path.resolve(__dirname, '../fixtures/single-cache')
 const complexTapePath = path.resolve(__dirname, '../fixtures/complex-cache')

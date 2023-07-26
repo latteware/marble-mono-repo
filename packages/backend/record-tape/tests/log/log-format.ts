@@ -1,5 +1,5 @@
 /* global describe, it */
-import { RecordTape } from '../../index'
+import { RecordTape } from '../../src/index'
 import { expect } from 'chai'
 
 const baseTapeData = [

@@ -2,7 +2,7 @@
 import { expect } from 'chai'
 import fs from 'fs'
 import path from 'path'
-import { RecordTape } from '../../index'
+import { RecordTape } from '../../src/index'
 
 const logFileData = '{"name":"name","type":"success","input":[true],"output":true,"boundaries":{}}\n{"name":"name","type":"error","input":[true],"error":"invalid data","boundaries":{}}\n'
 

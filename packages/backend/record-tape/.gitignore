@@ -2,4 +2,4 @@
 dist
 node_modules
 
-src/tests/fixtures/save.log
+tests/fixtures/save.log

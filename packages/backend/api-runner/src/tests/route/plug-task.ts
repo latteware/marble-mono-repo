@@ -302,7 +302,7 @@ describe('route plug body params', function () {
     routers.add(srv)
     const app = srv.listen()
 
-    const res = await request(app).post(`/api/${testUuid}`).send({flag: true})
+    const res = await request(app).post(`/api/${testUuid}`).send({ flag: true })
 
     expect(res).to.have.status(200)
     expect(res.body).to.deep.equal({
@@ -343,7 +343,7 @@ describe('route plug body params', function () {
     routers.add(srv)
     const app = srv.listen()
 
-    const res = await request(app).post(`/api/${testUuid}`).send({flag: true})
+    const res = await request(app).post(`/api/${testUuid}`).send({ flag: true })
 
     expect(res).to.have.status(200)
     expect(res.body).to.deep.equal({

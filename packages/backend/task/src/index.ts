@@ -98,10 +98,6 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
   }
 
   getSchema (): any {
-    if (typeof this._schema === 'undefined') {
-      return new Schema({})
-    }
-
     return this._schema
   }
 

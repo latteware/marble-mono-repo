@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/task",
-  "version": "1.0.0-rc.5",
+  "version": "1.0.0-rc.6",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -37,7 +37,7 @@
   },
   "homepage": "https://github.com/latteware/marble-mono-repo/tree/main/packages/backend/task#readme",
   "dependencies": {
-    "@marble-seeds/schema": "^0.1.0",
+    "@marble-seeds/schema": "^0.1.1",
     "minimist": "^1.2.6"
   },
   "ts-standard": {

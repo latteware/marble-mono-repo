@@ -4,6 +4,7 @@ const Schema = class {
   constructor (properties) {
     const schema = Joi.object(properties)
     this._schema = schema
+    this._isMarbleSchema = true
   }
 
   setSchema (schema) {

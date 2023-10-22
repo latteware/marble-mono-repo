@@ -1,9 +1,10 @@
-import _ from 'lodash'
 import debug from 'debug'
+import { Route } from '..'
 
 const log = debug('api')
 
 interface RouteType {
+  priority: number
   _isRoute: boolean
   _isRouter: boolean
   prefix: string
@@ -13,11 +14,13 @@ interface RouteType {
   middlewares: any[]
 
   add: (app: any) => void
+  clone: () => RouteType
 }
 
 interface RouterType {
   _isRoute: boolean
   _isRouter: boolean
+  priority: number
   prefix: string
   name: string
   method: string
@@ -25,11 +28,33 @@ interface RouterType {
   middlewares: any[]
 
   add: (app: any) => void
+  clone: () => RouteType
   getRoutes: () => Array<RouteType | RouterType>
 }
 
+function deepClone<T>(obj: T): T {
+  if (obj === null) return obj;
+  if (typeof obj !== "object") return obj;
+
+  if (obj instanceof Array) {
+     const copy: any[] = [];
+     for (let i = 0; i < obj.length; i++) {
+        copy[i] = deepClone(obj[i]);
+     }
+     return copy as T;
+  }
+
+  const copy = {} as T;
+  for (let attr in obj) {
+     if (obj.hasOwnProperty(attr)) {
+        copy[attr] = deepClone(obj[attr]);
+     }
+  }
+  return copy;
+}
+
 const merge = function (router: { prefix: string, middlewares: any[] }, item: RouteType): RouteType {
-  const route: RouteType = _.clone(item)
+  const route: RouteType = item.clone()
 
   if (router.prefix !== undefined) {
     route.path = router.prefix + route.path
@@ -80,7 +105,7 @@ export class Router {
 
   setRoutes (): void {
     const routes: RouteType[] = []
-    _.forEach(this.routes, (item: RouteType | RouterType, name: string) => {
+    this.routes.forEach((item: RouteType | RouterType, name: string) => {
       item.name = name
       const route = item as RouteType
       const router = item as RouterType
@@ -88,19 +113,19 @@ export class Router {
       if (isRoute(route)) {
         routes.push(route)
       } else if (isRouter(router)) {
-        _.forEach(router.getRoutes(), (route, name) => {
-          routes.push(merge(item, route))
+        router.getRoutes().forEach(route => {
+          return routes.push(merge(item, route))
         })
       }
     })
 
-    this._routes = _.sortBy(routes, route => route.priority * -1)
+    this._routes = routes.sort((a, b) => (b.priority - a.priority))
   }
 
   add (app): void {
     log(`Router => ${this.prefix} ${this._routes.length}`)
 
-    _.forEach(this._routes, (item: RouteType, name: string) => {
+    this._routes.forEach((item: RouteType) => {
       item = merge({
         prefix: this.prefix,
         middlewares: this.middlewares

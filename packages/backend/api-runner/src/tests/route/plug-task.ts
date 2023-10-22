@@ -116,6 +116,281 @@ describe('route plug tests', function () {
   })
 })
 
+describe('route plug get params', function () {
+  it('/api/:uuid should return 200 with query', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, query }: { uuid: string, query: string }) => {
+      // Get uuid from url and query from query params
+      return {
+        uuid,
+        query
+      }
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'get',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).get(`/api/${testUuid}?query=here`)
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid,
+      query: 'here'
+    })
+  })
+
+  it('Validator on /api/:uuid should return 200 with query', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, query }: { uuid: string, query: string }) => {
+      // Get uuid from url and query from query params
+      return {
+        uuid,
+        query
+      }
+    })
+
+    task.setSchema({
+      uuid: types.string.required(),
+      query: types.string
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'get',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).get(`/api/${testUuid}?query=here`)
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid,
+      query: 'here'
+    })
+  })
+
+  it('Validator on /api/:uuid should return 200 without query', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, query }: { uuid: string, query: string }) => {
+      // Get uuid from url and query from query params
+      return {
+        uuid,
+        query: query ?? ''
+      }
+    })
+
+    task.setSchema({
+      uuid: types.string.required(),
+      query: types.string
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'get',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).get(`/api/${testUuid}`)
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid,
+      query: ''
+    })
+  })
+
+  it('Validator on /api/:uuid should return 422 if required', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, query }: { uuid: string, query: string }) => {
+      // Get uuid from url and flag from post body
+      return {
+        uuid,
+        query
+      }
+    })
+
+    task.setSchema({
+      uuid: types.string.required(),
+      query: types.string.required()
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'get',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).get(`/api/${testUuid}`)
+
+    expect(res).to.have.status(422)
+    expect(res.body.message).to.equal('"query" is required')
+  })
+})
+
+describe('route plug body params', function () {
+  it('/api/:uuid should return 200 with flag', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, flag }: { uuid: string, flag: boolean }) => {
+      // Get uuid from url and flag from post body
+      return {
+        uuid,
+        flag
+      }
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'post',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).post(`/api/${testUuid}`).send({ flag: true })
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid,
+      flag: true
+    })
+  })
+
+  it('Validator on /api/:uuid should return 200 with flag', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, flag }: { uuid: string, flag: boolean }) => {
+      // Get uuid from url and flag from post body
+      return {
+        uuid,
+        flag
+      }
+    })
+
+    task.setSchema({
+      uuid: types.string.required(),
+      flag: types.boolean.required()
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'post',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).post(`/api/${testUuid}`).send({ flag: true })
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid,
+      flag: true
+    })
+  })
+
+  it('Validator on /api/:uuid should return 422', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid, flag }: { uuid: string, flag: boolean }) => {
+      // Get uuid from url and flag from post body
+      return {
+        uuid,
+        flag
+      }
+    })
+
+    task.setSchema({
+      uuid: types.string.required(),
+      flag: types.boolean.required()
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'post',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).post(`/api/${testUuid}`)
+
+    expect(res).to.have.status(422)
+    expect(res.body.message).to.equal('"flag" is required')
+  })
+})
+
 describe('route plug errors tests', function () {
   it('/api/:uuid should return 404 on error "Not found"', async function () {
     const srv = server()

@@ -110,7 +110,7 @@ Route.plugTask = function ({ method, path, box }) {
     path,
     validator: box.getSchema(),
     handler: async (ctx) => {
-      let argv = ctx.body
+      let argv = ctx.request.body
       if (method === 'get') {
         argv = ctx.request.query
       }

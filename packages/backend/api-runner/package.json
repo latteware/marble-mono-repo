@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/api",
-  "version": "0.3.1",
+  "version": "0.4.0",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,8 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "ts-standard -p tsconfig.json"
+    "lint": "ts-standard -p tsconfig.json",
+    "lint:fix": "ts-standard --fix -p tsconfig.json"
   },
   "repository": {
     "type": "git",

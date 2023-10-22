@@ -41,4 +41,38 @@ describe('route plug tests', function () {
       success: true
     })
   })
+
+  it('/api/:uuid should return 200 for box', async function () {
+    const srv = server()
+
+    const testUuid = 'foo'
+
+    const task = new Task(({ uuid }: { uuid: string }) => {
+      console.log('here?', uuid)
+      return {
+        uuid
+      }
+    })
+
+    const route = Route.plugTask({
+      box: task,
+      method: 'get',
+      path: '/:uuid'
+    })
+
+    const routers = new Router({
+      routes: [route],
+      prefix: '/api'
+    })
+
+    routers.add(srv)
+    const app = srv.listen()
+
+    const res = await request(app).get(`/api/${testUuid}`)
+
+    expect(res).to.have.status(200)
+    expect(res.body).to.deep.equal({
+      uuid: testUuid
+    })
+  })
 })

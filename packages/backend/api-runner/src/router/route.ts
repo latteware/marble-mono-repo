@@ -114,7 +114,7 @@ Route.plugTask = function ({ method, path, box }) {
 
       let result, error
       try {
-        result = await box.run(argv)
+        result = await box.run({ ...argv, ...ctx.request.params })
       } catch (e) {
         error = e
       }

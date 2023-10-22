@@ -1,5 +1,4 @@
 import debug from 'debug'
-import { Route } from '..'
 
 const log = debug('api')
 
@@ -30,27 +29,6 @@ interface RouterType {
   add: (app: any) => void
   clone: () => RouteType
   getRoutes: () => Array<RouteType | RouterType>
-}
-
-function deepClone<T>(obj: T): T {
-  if (obj === null) return obj;
-  if (typeof obj !== "object") return obj;
-
-  if (obj instanceof Array) {
-     const copy: any[] = [];
-     for (let i = 0; i < obj.length; i++) {
-        copy[i] = deepClone(obj[i]);
-     }
-     return copy as T;
-  }
-
-  const copy = {} as T;
-  for (let attr in obj) {
-     if (obj.hasOwnProperty(attr)) {
-        copy[attr] = deepClone(obj[attr]);
-     }
-  }
-  return copy;
 }
 
 const merge = function (router: { prefix: string, middlewares: any[] }, item: RouteType): RouteType {

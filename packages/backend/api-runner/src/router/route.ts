@@ -103,16 +103,16 @@ export class Route {
     app.use(rtr.routes())
   }
 
-  public clone(): Route {
+  public clone (): Route {
     return new Route({
-        method: this.method,
-        path: this.path,
-        handler: this.handler,
-        priority: this.priority,
-        middlewares: [...this.middlewares],  // Copy the middlewares array to avoid shared reference
-        bodySize: this.bodySize,
-        validator: this.validator  // Assuming Schema class or validator._isMarbleSchema=true objects can be shared
-    });
+      method: this.method,
+      path: this.path,
+      handler: this.handler,
+      priority: this.priority,
+      middlewares: [...this.middlewares], // Copy the middlewares array to avoid shared reference
+      bodySize: this.bodySize,
+      validator: this.validator // Assuming Schema class or validator._isMarbleSchema=true objects can be shared
+    })
   }
 }
 

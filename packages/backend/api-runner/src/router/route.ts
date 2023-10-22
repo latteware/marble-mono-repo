@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
 
@@ -6,6 +5,7 @@ import Schema from '@marble-seeds/schema'
 export interface RouteType {
   _isRoute: boolean
   _isRouter: boolean
+  priority: number
   prefix: string
   name: string
   method: string
@@ -13,6 +13,7 @@ export interface RouteType {
   middlewares: any[]
 
   add: (app: any) => void
+  clone: () => RouteType
 }
 
 export class Route {
@@ -78,7 +79,7 @@ export class Route {
       await next()
     })
 
-    _.forEach(this.middlewares, mdw => {
+    this.middlewares.forEach(mdw => {
       rtr.use(mdw)
     })
 
@@ -101,6 +102,18 @@ export class Route {
     })
 
     app.use(rtr.routes())
+  }
+
+  public clone (): Route {
+    return new Route({
+      method: this.method,
+      path: this.path,
+      handler: this.handler,
+      priority: this.priority,
+      middlewares: [...this.middlewares], // Copy the middlewares array to avoid shared reference
+      bodySize: this.bodySize,
+      validator: this.validator // Assuming Schema class or validator._isMarbleSchema=true objects can be shared
+    })
   }
 }
 

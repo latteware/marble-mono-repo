@@ -5,6 +5,7 @@ import Schema from '@marble-seeds/schema'
 export interface RouteType {
   _isRoute: boolean
   _isRouter: boolean
+  priority: number
   prefix: string
   name: string
   method: string
@@ -12,6 +13,7 @@ export interface RouteType {
   middlewares: any[]
 
   add: (app: any) => void
+  clone: () => RouteType
 }
 
 export class Route {

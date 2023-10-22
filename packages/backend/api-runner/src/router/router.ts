@@ -1,20 +1,8 @@
 import debug from 'debug'
 
+import { type RouteType } from './route'
+
 const log = debug('api')
-
-interface RouteType {
-  priority: number
-  _isRoute: boolean
-  _isRouter: boolean
-  prefix: string
-  name: string
-  method: string
-  path: string
-  middlewares: any[]
-
-  add: (app: any) => void
-  clone: () => RouteType
-}
 
 interface RouterType {
   _isRoute: boolean

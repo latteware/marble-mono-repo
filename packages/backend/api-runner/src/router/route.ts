@@ -46,7 +46,11 @@ export class Route {
     this.bodySize = this.options.bodySize ?? '1mb'
 
     if (this.options.validator !== undefined) {
-      this.validator = new Schema(this.options.validator)
+      if (this.options.validator._isMarbleSchema === true) {
+        this.validator = options.validator
+      } else {
+        this.validator = new Schema(options.validator)
+      }
     }
   }
 
@@ -85,11 +89,10 @@ export class Route {
           argv = ctx.request.query
         }
 
-        const error = validator.validate(argv)
+        const error = validator.validate({ ...argv, ...ctx.request.params })
 
         if (error !== undefined) {
           const err = error.details[0]
-
           return ctx.throw(422, err.message)
         }
       }
@@ -120,7 +123,18 @@ Route.plugTask = function ({ method, path, box }) {
       }
 
       if (error !== undefined) {
-        return ctx.throw(422, error.message)
+        let errorCode = 400
+        if (error.message === 'Not found') {
+          errorCode = 404
+        } else if (error.message === 'Unauthorized') {
+          errorCode = 401
+        } else if (error.message === 'Forbidden') {
+          errorCode = 403
+        } else if (error.message === 'Unprocessable Entity') {
+          errorCode = 422
+        }
+
+        return ctx.throw(errorCode, error.message)
       }
 
       ctx.body = result

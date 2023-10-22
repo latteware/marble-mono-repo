@@ -154,7 +154,7 @@ describe('Get Schema', function () {
     expect(seed).to.equal('{"value":{"type":"number","flags":{"presence":"required"}}}')
   })
 
-  it('Emptry object as string', async function () {
+  it('Empty object as string', async function () {
     const add2 = new Task(function (int: number) {
       return int + 2
     }, {})

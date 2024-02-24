@@ -1,9 +1,12 @@
 {
   "compilerOptions": {
-    "strictNullChecks": true,
     "outDir": "./dist",
     "rootDir": "./src",
+
+    "target": "ES2021",
+    "module": "commonjs",
     "resolveJsonModule": true,
+    "strictNullChecks": true,
     "esModuleInterop": true
   },
   "include": ["src/**/*"],

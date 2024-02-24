@@ -1,4 +1,3 @@
-import _ from 'lodash'
 import Router from 'koa-router'
 import bodyParser from 'koa-bodyparser'
 
@@ -6,6 +5,7 @@ import Schema from '@marble-seeds/schema'
 export interface RouteType {
   _isRoute: boolean
   _isRouter: boolean
+  priority: number
   prefix: string
   name: string
   method: string
@@ -13,6 +13,7 @@ export interface RouteType {
   middlewares: any[]
 
   add: (app: any) => void
+  clone: () => RouteType
 }
 
 export class Route {
@@ -46,7 +47,11 @@ export class Route {
     this.bodySize = this.options.bodySize ?? '1mb'
 
     if (this.options.validator !== undefined) {
-      this.validator = new Schema(this.options.validator)
+      if (this.options.validator._isMarbleSchema === true) {
+        this.validator = options.validator
+      } else {
+        this.validator = new Schema(options.validator)
+      }
     }
   }
 
@@ -74,7 +79,7 @@ export class Route {
       await next()
     })
 
-    _.forEach(this.middlewares, mdw => {
+    this.middlewares.forEach(mdw => {
       rtr.use(mdw)
     })
 
@@ -85,11 +90,10 @@ export class Route {
           argv = ctx.request.query
         }
 
-        const error = validator.validate(argv)
+        const error = validator.validate({ ...argv, ...ctx.request.params })
 
         if (error !== undefined) {
           const err = error.details[0]
-
           return ctx.throw(422, err.message)
         }
       }
@@ -99,6 +103,18 @@ export class Route {
 
     app.use(rtr.routes())
   }
+
+  public clone (): Route {
+    return new Route({
+      method: this.method,
+      path: this.path,
+      handler: this.handler,
+      priority: this.priority,
+      middlewares: [...this.middlewares], // Copy the middlewares array to avoid shared reference
+      bodySize: this.bodySize,
+      validator: this.validator // Assuming Schema class or validator._isMarbleSchema=true objects can be shared
+    })
+  }
 }
 
 Route.plugTask = function ({ method, path, box }) {
@@ -107,20 +123,31 @@ Route.plugTask = function ({ method, path, box }) {
     path,
     validator: box.getSchema(),
     handler: async (ctx) => {
-      let argv = ctx.body
+      let argv = ctx.request.body
       if (method === 'get') {
         argv = ctx.request.query
       }
 
       let result, error
       try {
-        result = await box.run(argv)
+        result = await box.run({ ...argv, ...ctx.request.params })
       } catch (e) {
         error = e
       }
 
       if (error !== undefined) {
-        return ctx.throw(422, error.message)
+        let errorCode = 400
+        if (error.message === 'Not found') {
+          errorCode = 404
+        } else if (error.message === 'Unauthorized') {
+          errorCode = 401
+        } else if (error.message === 'Forbidden') {
+          errorCode = 403
+        } else if (error.message === 'Unprocessable Entity') {
+          errorCode = 422
+        }
+
+        return ctx.throw(errorCode, error.message)
       }
 
       ctx.body = result

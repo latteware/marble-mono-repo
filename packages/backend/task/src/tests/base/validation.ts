@@ -154,14 +154,13 @@ describe('Get Schema', function () {
     expect(seed).to.equal('{"value":{"type":"number","flags":{"presence":"required"}}}')
   })
 
-  it('Epmty object as string', async function () {
+  it('Empty object as string', async function () {
     const add2 = new Task(function (int: number) {
       return int + 2
     }, {})
 
     const schema = add2.getSchema()
-    const seed = schema.toString()
 
-    expect(seed).to.equal('{}')
+    expect(schema).to.equal(undefined)
   })
 })

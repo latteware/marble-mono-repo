@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/api",
-  "version": "0.3.1",
+  "version": "0.4.3",
   "description": "",
   "main": "dist/index.js",
   "scripts": {
@@ -8,7 +8,9 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
-    "lint": "ts-standard -p tsconfig.json"
+    "lint": "ts-standard -p tsconfig.json",
+    "lint:fix": "ts-standard --fix -p tsconfig.json",
+    "publish": "tsc --declaration && npm publish"
   },
   "repository": {
     "type": "git",
@@ -37,6 +39,8 @@
   },
   "dependencies": {
     "@koa/cors": "^4.0.0",
+    "@marble-seeds/schema": "0.1.1",
+    "@marble-seeds/task": "1.0.0-rc.6",
     "@types/koa__router": "^12.0.0",
     "debug": "^4.3.4",
     "koa": "^2.14.2",
@@ -44,9 +48,6 @@
     "koa-logger": "^3.2.1",
     "koa-remove-trailing-slashes": "^2.0.3",
     "koa-router": "^12.0.0",
-    "lodash": "^4.17.21",
-    "traverse": "^0.6.7",
-    "@marble-seeds/task": "1.0.0-rc.5",
-    "@marble-seeds/schema": "0.1.0"
+    "traverse": "^0.6.7"
   }
 }

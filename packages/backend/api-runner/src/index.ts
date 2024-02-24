@@ -14,10 +14,13 @@ export const server = function (config: Config = {}): any {
   const app = new Koa()
 
   if (config.env !== 'test') {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     app.use(logger())
   }
 
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   app.use(cors())
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
   app.use(removeTrailingSlashes())
   app.use(middlewares.sanitizeBody)
   app.use(middlewares.errorHandler)

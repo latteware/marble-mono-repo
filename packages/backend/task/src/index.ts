@@ -1,7 +1,7 @@
 import parseArgs from 'minimist'
 import Schema from '@marble-seeds/schema'
 
-import { createBoundary } from './utils/boundary'
+import { createBoundary, type Mode } from './utils/boundary'
 
 export type BaseFunction = (...args: any[]) => any
 
@@ -19,11 +19,12 @@ export interface TaskInstanceType {
   setSchema: (base: any) => void
   getSchema: () => any
   validate: (argv: any) => any | undefined
+  // eslint-disable-next-line @typescript-eslint/ban-types
   addListener: (fn: Function) => void
   removeListener: () => void
   emit: (data: any) => void
   getBoundaries: () => any
-  setBoundariesData: (boundariesData: { [x: string]: any }) => void
+  setBoundariesData: (boundariesData: Record<string, any>) => void
   getBondariesData: () => any
   getBondariesRunLog: () => any
   startRunLog: () => void
@@ -41,6 +42,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
   _boundariesData: any | null
 
   _schema: any | undefined
+  // eslint-disable-next-line @typescript-eslint/ban-types
   _listener: Function | undefined
 
   constructor (fn: Func, conf: TaskConfig = {
@@ -115,6 +117,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
 
   // Listen and emit to make it easy to have hooks
   // Posible improvement to handle multiple listeners, but so far its not needed
+  // eslint-disable-next-line @typescript-eslint/ban-types
   addListener (fn: Function): void {
     this._listener = fn
   }
@@ -141,7 +144,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
     return this._boundaries
   }
 
-  setBoundariesData (boundariesData: { [x: string]: any }): void {
+  setBoundariesData (boundariesData: Record<string, any>): void {
     for (const name in this._boundaries) {
       const boundary = this._boundaries[name]
 
@@ -184,7 +187,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
 
         boundary.setTape(tape)
       }
-      boundary.setMode(mode)
+      boundary.setMode(mode as Mode)
 
       boundariesFns[name] = boundary
     }
@@ -229,7 +232,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
     this.startRunLog()
     const boundaries = this._boundaries
 
-    const q: Promise<ReturnType<Func>> = new Promise((resolve, reject) => {
+    const q = new Promise<ReturnType<Func>>((resolve, reject) => {
       const error = this.validate(argv)
 
       if (typeof error !== 'undefined') {

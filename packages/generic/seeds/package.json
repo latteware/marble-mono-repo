@@ -1,0 +1,50 @@
+{
+  "name": "@marble-seeds/seeds",
+  "version": "0.0.7",
+  "description": "",
+  "main": "dist/bundle.js",
+  "scripts": {
+    "build": "node build.mjs",
+    "watch": "nodemon build.mjs",
+    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
+    "coverage": "nyc npm run test",
+    "coverage-report": "nyc  --reporter=html npm run test",
+    "lint": "ts-standard -p tsconfig.eslint.json",
+    "lint:fix": "ts-standard --fix --project tsconfig.eslint.json",
+    "prepack": "npm run lint && npm run build"
+  },
+  "bin": {
+    "seeds": "./dist/bundle.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/latteware/seeds"
+  },
+  "author": "Siedrix",
+  "license": "MIT",
+  "devDependencies": {
+    "@types/mocha": "^10.0.1",
+    "chai": "^4.3.6",
+    "mocha": "^10.0.0",
+    "nyc": "^15.1.0",
+    "pre-commit": "^1.2.2",
+    "ts-standard": "^12.0.2",
+    "typescript": "^5.1.6"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "dependencies": {
+    "@marble-seeds/record-tape": "^0.8.0-rc.3",
+    "@marble-seeds/task": "^1.0.0-rc.6",
+    "@marble-seeds/task-runner": "^0.1.1",
+    "@types/node": "^20.10.6",
+    "camelcase": "^8.0.0",
+    "dotenv": "^16.3.1",
+    "esbuild": "^0.20.0",
+    "handlebars": "^4.7.8",
+    "minimist": "^1.2.8",
+    "ts-node": "^10.9.1"
+  }
+}

@@ -130,6 +130,7 @@ export const RecordTape = class RecordTape {
     task._listener = async (logItem, boundaries) => {
       // Only update if mode is record
       if (this.getMode() === 'record') {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
         this.addLogItem(name, logItem)
       }
     }
@@ -165,6 +166,7 @@ export const RecordTape = class RecordTape {
       return
     }
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     this._log = this.parse(content)
 
     return this._log

@@ -2,7 +2,7 @@ import * as assert from 'assert'
 
 type BaseBoundary = (...args: any[]) => any
 
-type Mode = 'proxy' | 'proxy-pass' | 'proxy-catch' | 'replay'
+export type Mode = 'proxy' | 'proxy-pass' | 'proxy-catch' | 'replay'
 
 export const createBoundary = <Func extends BaseBoundary>(fn: Func): {
   (...args: Parameters<Func>): Promise<ReturnType<Func>>

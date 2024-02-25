@@ -72,7 +72,6 @@ describe('route plug tests', function () {
 
     const res = await request(app).get(`/api/${testUuid}`)
 
-    // console.log('->', res)
     expect(res).to.have.status(200)
     expect(res.body).to.deep.equal({
       uuid: testUuid

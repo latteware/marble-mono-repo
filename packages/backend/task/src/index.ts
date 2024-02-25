@@ -54,7 +54,7 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
     this._fn = fn
     // review how to add it in the same from on API and task
     this._schema = undefined
-    if (typeof conf.validate !== 'undefined') {
+    if (conf.validate !== undefined) {
       this._schema = new Schema(conf.validate)
     }
 

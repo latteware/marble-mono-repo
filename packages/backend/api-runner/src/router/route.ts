@@ -61,8 +61,6 @@ export class Route {
     const validator = this.validator
     const handler = this.handler
 
-    console.log('Adding with:', this.validator)
-
     const rtr = new Router()
 
     rtr.use(bodyParser({
@@ -132,10 +130,8 @@ Route.plugTask = function ({ method, path, box }) {
 
       let result, error
       try {
-        console.log('Running with:', { ...argv, ...ctx.request.params })
         result = await box.run({ ...argv, ...ctx.request.params })
       } catch (e) {
-        console.error('Catched', e)
         error = e
       }
 

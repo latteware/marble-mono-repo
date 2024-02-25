@@ -45,7 +45,7 @@ describe('route plug tests', function () {
     })
   })
 
-  it.only('/api/:uuid should return 200 for box', async function () {
+  it('/api/:uuid should return 200 for box', async function () {
     const srv = server()
 
     const testUuid = 'foo'
@@ -55,8 +55,6 @@ describe('route plug tests', function () {
         uuid
       }
     })
-
-    console.log('Schema?', task._schema, task.getSchema())
 
     const route = Route.plugTask({
       box: task,

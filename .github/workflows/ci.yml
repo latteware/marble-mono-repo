@@ -16,6 +16,5 @@ jobs:
       - run: npm ci
 
       - run: npx nx run-many --target=build --parallel=1
-      - run: npx nx run-many --target=build
-      - run: npx nx affected --target=lint --parallel=3
-      - run: npx nx affected --target=test --parallel=3 --ci --code-coverage
+      - run: npx nx run-many --target=lint --parallel=3
+      - run: npx nx run-many --target=test --parallel=3 --ci --code-coverage

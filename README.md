@@ -1,19 +1,6 @@
-## TS runner example
+## Welcome to Marble seeds mono repo.
 
-## Install with
-
-```
-npm i
-```
-
-## Docs
-
-Use `ts-node src/cli.ts list` to list available tasks
-
-Use `ts-node src/cli.ts run --task parse-email --url 'http://mail.com'` to run a tasks
-
-Use `ts-node src/cli.ts clean-log --task parse-email` to clear logs of a task
-
+This is managed by NX. To list all the projects over here do `nx show projects`. Still everything is to early to show but its something.
 
 ## Milestone 1: Flow of a task
 

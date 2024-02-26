@@ -4,13 +4,12 @@
 // posible task are init, describe, create-task, run, build, deploy commands
 import minimist from 'minimist'
 import esbuild from 'esbuild'
-import fs from 'fs'
 import path from 'path'
 import camelCase from 'camelcase'
 
 import { version } from '../package.json'
 
-import { createTask } from './tasks/createTask'
+import { runner } from './runners/cli/runner'
 
 type Tasks = Record<string, {
   task: any
@@ -18,18 +17,6 @@ type Tasks = Record<string, {
 }>
 
 const args = minimist(process.argv.slice(2))
-
-// ToDo: move to a marble task
-// Function to initialize and create seeds.json
-function initializeSeedsConfig (): void {
-  const seedsPath = path.join(process.cwd(), 'seeds.json')
-  const config = {}
-
-  console.log('Should init a project on', seedsPath)
-  console.log('Init config', config)
-  fs.writeFileSync(seedsPath, JSON.stringify(config, null, 2))
-  console.log('seeds.json has been created')
-}
 
 type Props = Record<string, any>
 
@@ -90,10 +77,12 @@ async function bundle (runnerName: string): Promise<bundleOutput> {
   }
 }
 
-// Check if the init command is called
+// ToDo: Check if the init command is called
 if (args.version !== undefined) {
   console.log(`seeds version ${version}`)
 } else if (args._[0] === 'create-task') {
+  const createTask = runner.getTask('createTask')
+
   createTask.run({
     taskName: camelCase(args.name as string),
     path: args.path
@@ -145,7 +134,13 @@ if (args.version !== undefined) {
     console.error('Error', err)
   })
 } else if (args._.includes('init') === true) {
-  initializeSeedsConfig()
+  const init = runner.getTask('init')
+
+  init.run({}).then(async outcome => {
+    console.log('Init', outcome)
+  }).catch(err => {
+    console.error('Cant init!', err)
+  })
 } else {
   // Catch all
   console.error('invalid options')

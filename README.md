@@ -4,7 +4,7 @@ This is managed by NX. To list all the projects over here do `nx show projects`.
 
 ## Milestone 1: Flow of a task
 
-#### Step 1 - init
+#### [Done]Step 1 - init
 
 Maybe add path from the task folder... use "src/tasks/" for the default
 
@@ -33,7 +33,11 @@ Run and create a logItem from the execution
 
 Use the CLI to create a test based on the logItem from the last execution
 
-## Milestone 21: Deploy a runner
+## Future milestones
+
+### Milestone: Deploy a runner
+
+Objective: A deploy flow to the runner to a lambda
 
 #### Step 1 create a runner
 
@@ -43,8 +47,17 @@ Use the CLI to create a test based on the logItem from the last execution
 
 #### Step 3 deploy to a lambda
 
+### Milestone: Interactive CLI
 
+Objective: Add [inquirer](package) to the CLI to allow an interactive experieces
 
+### Milestone: Load a Runner on the UI
+
+Objective: Allow a CRA, Nextjs or Expo project to load a runner and have it load or mutada data
+
+### Milestone: DynamoDB data store
+
+Objective: Create a datastore with DynamoDB as backed using Marble Schemas to define the table schema
 
 
 

@@ -5,7 +5,6 @@
 import minimist from 'minimist'
 import esbuild from 'esbuild'
 import path from 'path'
-import camelCase from 'camelcase'
 
 import { version } from '../package.json'
 
@@ -81,11 +80,11 @@ async function bundle (runnerName: string): Promise<bundleOutput> {
 if (args.version !== undefined) {
   console.log(`seeds version ${version}`)
 } else if (args._[0] === 'create-task') {
-  const createTask = runner.getTask('createTask')
+  const createTask = runner.getTask('create')
 
   createTask.run({
-    taskName: camelCase(args.name as string),
-    path: args.path
+    taskDescriptor: args.name,
+    taskPath: args.path
   }).then(res => {
     console.log('Created successfully:', res)
   }).catch(err => {
@@ -132,6 +131,15 @@ if (args.version !== undefined) {
     return res
   }).catch(err => {
     console.error('Error', err)
+  })
+} else if (args._.includes('list-tasks') === true) {
+  console.log('Here?')
+  const listTasks = runner.getTask('listTasks')
+
+  listTasks.run({}).then(async outcome => {
+    console.log('listTasks', outcome)
+  }).catch(err => {
+    console.error('Cant listTasks!', err.message)
   })
 } else if (args._.includes('init') === true) {
   const init = runner.getTask('init')

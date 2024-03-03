@@ -8,13 +8,16 @@ This is managed by NX. To list all the projects over here do `nx show projects`.
 
 Maybe add path from the task folder... use "src/tasks/" for the default
 
-####  Step 2 - create task
+####  [Done]Step 2 - create task
 
 `> seeds create-task --name "stocks:get-delta" --path src/tasks/`
 
 => use base path "src/tasks/" if not provided use the one on seeds.json
+
 => split the :
+
 => use folder stocks to create getDelta.ts
+
 => add to seeds.json an object tasks with stocks:get-delta and the path src/tasks/stocks/getDelta.ts
 
 #### Step 3 run task
@@ -35,9 +38,9 @@ Use the CLI to create a test based on the logItem from the last execution
 
 ## Future milestones
 
-### Milestone: Deploy a runner
+### Milestone: Create and deploy a runneres
 
-Objective: A deploy flow to the runner to a lambda
+Objective: Be able to create a runner, running locally and  deploy flow to the runner to a lambda
 
 #### Step 1 create a runner
 
@@ -49,7 +52,7 @@ Objective: A deploy flow to the runner to a lambda
 
 ### Milestone: Interactive CLI
 
-Objective: Add [inquirer](package) to the CLI to allow an interactive experieces
+Objective: Add [inquirer](https://www.npmjs.com/package/inquirer) to the CLI to allow an interactive experieces
 
 ### Milestone: Load a Runner on the UI
 
@@ -59,5 +62,16 @@ Objective: Allow a CRA, Nextjs or Expo project to load a runner and have it load
 
 Objective: Create a datastore with DynamoDB as backed using Marble Schemas to define the table schema
 
+### Milestone: Runner pre funcion per env
 
+Objective: Allow runners to define a pre function(that is a task) with and env(local, ui, lambda) so it can process the inputs easier.
 
+Use case: A lambda event for a S3 file should be parsed so the tasks can be created easilly, while on local it can be runned with a simple uuid and bucket param
+
+## Projects to research
+
+#### Typia
+
+[Typia Docs](https://typia.io/docs/)
+
+This project allows to create validators from typescript types on the fly. This could be a great way to handle schema validation instead or on top of Joi.

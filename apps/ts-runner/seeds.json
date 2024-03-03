@@ -2,5 +2,10 @@
   "paths": {
     "tasks": "src/tasks/",
     "runners": "src/runners/"
+  },
+  "tasks": {
+    "stocks:getDelta": {
+      "path": "src/tasks/stocks/getDelta.ts"
+    }
   }
 }

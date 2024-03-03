@@ -13,7 +13,7 @@ type Tasks = Record<string, {
   tape?: any
 }>
 
-export const Runner = class TaskRunner {
+export const Runner = class {
   public _folderPath: fs.PathLike | null
   public _tasks: Tasks
 

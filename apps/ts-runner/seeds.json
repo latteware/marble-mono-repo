@@ -1,0 +1,6 @@
+{
+  "paths": {
+    "tasks": "src/tasks/",
+    "runners": "src/runners/"
+  }
+}

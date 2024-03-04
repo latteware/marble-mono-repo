@@ -25,6 +25,10 @@ interface Arguments {
   params: Props
 }
 
+interface bundleOutput {
+  buildFile: string
+}
+
 export function parseRunnerArgs (margs: any): Arguments {
   const argv: any = margs
   const action: string = argv._[0]
@@ -55,10 +59,6 @@ async function loadRunner (runnerName: string): Promise<any> {
   return runner.default
 }
 
-interface bundleOutput {
-  buildFile: string
-}
-
 async function bundle (runnerName: string): Promise<bundleOutput> {
   const entryPoint = path.join(process.cwd(), `src/runners/${runnerName}/index.ts`)
   const outPoint = path.join(__dirname, `../.builds/${runnerName}/latest.js`)
@@ -79,8 +79,21 @@ async function bundle (runnerName: string): Promise<bundleOutput> {
 // ToDo: Check if the init command is called
 if (args.version !== undefined) {
   console.log(`seeds version ${version}`)
+} else if (args._[0] === 'run-task' && args._[1] !== undefined) {
+  const argv = parseRunnerArgs(args)
+  const runTask = runner.getTask('task:run')
+  console.log('Run task', args._[1], ' with ', argv.params)
+
+  runTask.run({
+    descriptorName: args._[1],
+    args: argv.params
+  }).then(res => {
+    console.log('Run successfully:', res)
+  }).catch(err => {
+    console.error('Opps!!!', err)
+  })
 } else if (args._[0] === 'create-task') {
-  const createTask = runner.getTask('create')
+  const createTask = runner.getTask('task:create')
 
   createTask.run({
     taskDescriptor: args.name,
@@ -133,8 +146,7 @@ if (args.version !== undefined) {
     console.error('Error', err)
   })
 } else if (args._.includes('list-tasks') === true) {
-  console.log('Here?')
-  const listTasks = runner.getTask('listTasks')
+  const listTasks = runner.getTask('task:list')
 
   listTasks.run({}).then(async outcome => {
     console.log('listTasks', outcome)

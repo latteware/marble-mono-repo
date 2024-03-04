@@ -20,32 +20,14 @@ interface TaskName {
   dir?: string
 }
 
-const parseTaskName = (taskDescriptor: string): TaskName => {
-  const res: string[] = taskDescriptor.split(':')
-
-  if (res.length === 1) {
-    return {
-      descriptor: `${camelCase(res[0])}`,
-      taskName: `${camelCase(res[0])}`,
-      fileName: `${camelCase(res[0])}.ts`
-    }
-  }
-
-  return {
-    dir: res[0],
-    descriptor: `${res[0]}:${camelCase(res[1])}`,
-    taskName: `${camelCase(res[1])}`,
-    fileName: `${camelCase(res[1])}.ts`
-  }
-}
-
 export const createTask = new Task(async function ({ taskDescriptor, taskPath }: TastArgv, {
   loadTemplate,
   persistTask,
   loadConf,
-  persistConf
+  persistConf,
+  parseTaskName
 }) {
-  const { taskName, fileName, descriptor, dir } = parseTaskName(taskDescriptor)
+  const { taskName, fileName, descriptor, dir } = await parseTaskName(taskDescriptor) as TaskName
 
   if (dir !== undefined) {
     taskPath = path.join(taskPath, dir)
@@ -75,7 +57,8 @@ export const createTask = new Task(async function ({ taskDescriptor, taskPath }:
   }
 
   seeds.tasks[descriptor] = {
-    path: `${taskPath}/${fileName}`
+    path: `${taskPath}/${fileName}`,
+    handler: taskName
   }
 
   await persistConf(seeds)
@@ -120,6 +103,24 @@ export const createTask = new Task(async function ({ taskDescriptor, taskPath }:
     persistConf: async (seeds) => {
       const seedsPath = path.join(process.cwd(), 'seeds.json')
       await fs.writeFile(seedsPath, JSON.stringify(seeds, null, 2))
+    },
+    parseTaskName: async (taskDescriptor: string): Promise<TaskName> => {
+      const res: string[] = taskDescriptor.split(':')
+
+      if (res.length === 1) {
+        return {
+          descriptor: `${camelCase(res[0])}`,
+          taskName: `${camelCase(res[0])}`,
+          fileName: `${camelCase(res[0])}.ts`
+        }
+      }
+
+      return {
+        dir: res[0],
+        descriptor: `${res[0]}:${camelCase(res[1])}`,
+        taskName: `${camelCase(res[1])}`,
+        fileName: `${camelCase(res[1])}.ts`
+      }
     }
   }
 })

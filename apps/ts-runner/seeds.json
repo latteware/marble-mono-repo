@@ -5,7 +5,12 @@
   },
   "tasks": {
     "stocks:getDelta": {
+      "handler": "getDelta",
       "path": "src/tasks/stocks/getDelta.ts"
+    },
+    "stocks:getPrice": {
+      "path": "src/tasks/stocks/getPrice.ts",
+      "handler": "getPrice"
     }
   }
 }

@@ -37,7 +37,7 @@ export const createTask = new Task(async function ({ taskDescriptor, taskPath }:
   ==================================================
   Starting task creation!
   Creating: ${taskName}
-  Dir:  ${dir}
+  Dir:  ${dir ?? ''}
   Into: ${taskPath}
   ==================================================
   `)

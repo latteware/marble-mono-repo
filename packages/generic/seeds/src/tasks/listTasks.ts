@@ -11,7 +11,7 @@ export const listTasks = new Task(async function (argv: TastArgv) {
   const raw = await fs.readFile(seedsPath, 'utf-8')
   const conf = JSON.parse(raw)
 
-  const tasks = conf.task ?? []
+  const tasks: string[] = conf.task ?? []
 
   console.log('Available tasks:')
   tasks.forEach(taskName => {

@@ -1,12 +1,12 @@
 {
   "name": "@marble-seeds/seeds",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
     "build": "node build.mjs",
     "watch": "nodemon build.mjs",
-    "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'src/tests/**/*.ts'",
+    "test": "mocha -r ts-node/register 'src/tests/**/*.ts'",
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
     "lint": "ts-standard",
@@ -14,7 +14,7 @@
     "prepack": "npm run lint && npm run build"
   },
   "bin": {
-    "seeds": "./dist/bundle.js"
+    "seeds": "./dist/bundle.js -- --source-map-support"
   },
   "repository": {
     "type": "git",

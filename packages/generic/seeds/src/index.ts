@@ -5,7 +5,6 @@
 import minimist from 'minimist'
 import esbuild from 'esbuild'
 import path from 'path'
-import camelCase from 'camelcase'
 
 import { version } from '../package.json'
 
@@ -24,6 +23,10 @@ interface Arguments {
   action: string
   taskName: string
   params: Props
+}
+
+interface bundleOutput {
+  buildFile: string
 }
 
 export function parseRunnerArgs (margs: any): Arguments {
@@ -56,10 +59,6 @@ async function loadRunner (runnerName: string): Promise<any> {
   return runner.default
 }
 
-interface bundleOutput {
-  buildFile: string
-}
-
 async function bundle (runnerName: string): Promise<bundleOutput> {
   const entryPoint = path.join(process.cwd(), `src/runners/${runnerName}/index.ts`)
   const outPoint = path.join(__dirname, `../.builds/${runnerName}/latest.js`)
@@ -80,12 +79,25 @@ async function bundle (runnerName: string): Promise<bundleOutput> {
 // ToDo: Check if the init command is called
 if (args.version !== undefined) {
   console.log(`seeds version ${version}`)
+} else if (args._[0] === 'run-task' && args._[1] !== undefined) {
+  const argv = parseRunnerArgs(args)
+  const runTask = runner.getTask('task:run')
+  console.log('Run task', args._[1], ' with ', argv.params)
+
+  runTask.run({
+    descriptorName: args._[1],
+    args: argv.params
+  }).then(res => {
+    console.log('Run successfully:', res)
+  }).catch(err => {
+    console.error('Opps!!!', err)
+  })
 } else if (args._[0] === 'create-task') {
-  const createTask = runner.getTask('createTask')
+  const createTask = runner.getTask('task:create')
 
   createTask.run({
-    taskName: camelCase(args.name as string),
-    path: args.path
+    taskDescriptor: args.name,
+    taskPath: args.path
   }).then(res => {
     console.log('Created successfully:', res)
   }).catch(err => {
@@ -132,6 +144,14 @@ if (args.version !== undefined) {
     return res
   }).catch(err => {
     console.error('Error', err)
+  })
+} else if (args._.includes('list-tasks') === true) {
+  const listTasks = runner.getTask('task:list')
+
+  listTasks.run({}).then(async outcome => {
+    console.log('listTasks', outcome)
+  }).catch(err => {
+    console.error('Cant listTasks!', err.message)
   })
 } else if (args._.includes('init') === true) {
   const init = runner.getTask('init')

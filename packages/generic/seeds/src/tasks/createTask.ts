@@ -3,27 +3,46 @@ import Schema from '@marble-seeds/schema'
 import Handlebars from 'handlebars'
 import path from 'path'
 import fs from 'fs/promises'
+import camelCase from 'camelcase'
 
 const p = path
 const templatePath = p.resolve(__dirname, '../templates/task.hbs')
 
 interface TastArgv {
-  taskName: string
-  path: string
+  taskDescriptor: string
+  taskPath: string
 }
 
-export const createTask = new Task(async function ({ taskName, path }: TastArgv, {
+interface TaskName {
+  descriptor: string
+  taskName: string
+  fileName: string
+  dir?: string
+}
+
+export const createTask = new Task(async function ({ taskDescriptor, taskPath }: TastArgv, {
   loadTemplate,
-  persisTask
+  persistTask,
+  loadConf,
+  persistConf,
+  parseTaskName
 }) {
-  const fileName = `${taskName}.ts`
+  const { taskName, fileName, descriptor, dir } = await parseTaskName(taskDescriptor) as TaskName
+
+  if (dir !== undefined) {
+    taskPath = path.join(taskPath, dir)
+  }
+
   console.log(`
   ==================================================
   Starting task creation!
   Creating: ${taskName}
-  Into: ${path}
+  Dir:  ${dir ?? ''}
+  Into: ${taskPath}
   ==================================================
   `)
+
+  const seeds = await loadConf()
 
   const template = await loadTemplate()
   const comp = Handlebars.compile(template)
@@ -31,9 +50,20 @@ export const createTask = new Task(async function ({ taskName, path }: TastArgv,
     taskName
   })
 
-  await persisTask(path, fileName, content)
+  await persistTask(taskPath, fileName, content)
 
-  return { path, fileName }
+  if (seeds.tasks === undefined) {
+    seeds.tasks = {}
+  }
+
+  seeds.tasks[descriptor] = {
+    path: `${taskPath}/${fileName}`,
+    handler: taskName
+  }
+
+  await persistConf(seeds)
+
+  return { taskPath, fileName }
 }, {
   boundaries: {
     loadTemplate: async () => {
@@ -41,7 +71,7 @@ export const createTask = new Task(async function ({ taskName, path }: TastArgv,
 
       return template
     },
-    persisTask: async (dir: string, fileName: string, content: string) => {
+    persistTask: async (dir: string, fileName: string, content: string) => {
       const dirPath = p.resolve(process.cwd(), dir)
       const taskPath = p.resolve(dirPath, fileName)
 
@@ -62,11 +92,40 @@ export const createTask = new Task(async function ({ taskName, path }: TastArgv,
       return {
         path: taskPath.toString()
       }
+    },
+    loadConf: async () => {
+      const seedsPath = path.join(process.cwd(), 'seeds.json')
+      const raw = await fs.readFile(seedsPath, 'utf-8')
+      const conf = JSON.parse(raw)
+
+      return conf
+    },
+    persistConf: async (seeds) => {
+      const seedsPath = path.join(process.cwd(), 'seeds.json')
+      await fs.writeFile(seedsPath, JSON.stringify(seeds, null, 2))
+    },
+    parseTaskName: async (taskDescriptor: string): Promise<TaskName> => {
+      const res: string[] = taskDescriptor.split(':')
+
+      if (res.length === 1) {
+        return {
+          descriptor: `${camelCase(res[0])}`,
+          taskName: `${camelCase(res[0])}`,
+          fileName: `${camelCase(res[0])}.ts`
+        }
+      }
+
+      return {
+        dir: res[0],
+        descriptor: `${res[0]}:${camelCase(res[1])}`,
+        taskName: `${camelCase(res[1])}`,
+        fileName: `${camelCase(res[1])}.ts`
+      }
     }
   }
 })
 
 createTask.setSchema({
-  taskName: Schema.types.string,
-  path: Schema.types.string
+  taskDescriptor: Schema.types.string,
+  taskPath: Schema.types.string
 })

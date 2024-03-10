@@ -24,17 +24,19 @@ Maybe add path from the task folder... use "src/tasks/" for the default
 
 Write the code of your task to get price and delta based on a period of time
 
-#### Step 4 run task
+#### [Done]Step 4 run task
 
-`> seeds run stocks:get-delta --ticket AMZN|NVDA`
-
-Run and create a logItem from the execution
+`> seeds run-task stocks:get-delta --ticket AMZN|NVDA`
 
 #### Step 5 create a tests
 
-`> seeds create=test stocks:get-delta`
+Make that a run task create a log item.
 
-Use the CLI to create a test based on the logItem from the last execution
+Then allow the user to create a for this log item with:
+
+`> seeds create-test stocks:get-delta`
+
+Maybe allow to pick the number of the log item or review log items. Will need to create a test suite in file at the time that the task is created.
 
 ## Future milestones
 

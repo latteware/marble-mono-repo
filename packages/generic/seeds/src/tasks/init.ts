@@ -10,6 +10,7 @@ export const init = new Task(async function (argv: TastArgv) {
   const seedsPath = path.join(process.cwd(), 'seeds.json')
   const config = {
     paths: {
+      logs: 'logs/',
       tasks: 'src/tasks/',
       runners: 'src/runners/'
     }

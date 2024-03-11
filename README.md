@@ -4,11 +4,11 @@ This is managed by NX. To list all the projects over here do `nx show projects`.
 
 ## Milestone 1: Flow of a task
 
-#### [Done]Step 1 - init
+#### [Done] Step 1 - init
 
 Maybe add path from the task folder... use "src/tasks/" for the default
 
-####  [Done]Step 2 - create task
+####  [Done] Step 2 - create task
 
 `> seeds create-task --name "stocks:get-delta" --path src/tasks/`
 
@@ -20,11 +20,11 @@ Maybe add path from the task folder... use "src/tasks/" for the default
 
 => add to seeds.json an object tasks with stocks:get-delta and the path src/tasks/stocks/getDelta.ts
 
-#### Step 3 run task
+#### [Done] Step 3 Code to the task
 
 Write the code of your task to get price and delta based on a period of time
 
-#### [Done]Step 4 run task
+#### [Done] Step 4 run task
 
 `> seeds run-task stocks:get-delta --ticket AMZN|NVDA`
 

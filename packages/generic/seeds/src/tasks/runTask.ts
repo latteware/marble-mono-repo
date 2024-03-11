@@ -1,6 +1,7 @@
 import path from 'path'
 import fs from 'fs/promises'
 import { Task } from '@marble-seeds/task'
+import { RecordTape } from '@marble-seeds/record-tape'
 import Schema from '@marble-seeds/schema'
 
 import { bundleTask } from './bundleTask'
@@ -22,6 +23,7 @@ export const runTask = new Task(async function ({ descriptorName, args }: TastAr
   const seeds = await loadConf()
   const taskDescriptor = seeds.tasks[descriptorName] as TaskDescriptor
 
+  const logsPath = path.join(process.cwd(), 'logs', descriptorName)
   const entryPoint = path.join(process.cwd(), taskDescriptor.path)
   const outputFile = path.resolve(__dirname, '../.builds', `${descriptorName}.js`)
 
@@ -33,7 +35,14 @@ export const runTask = new Task(async function ({ descriptorName, args }: TastAr
   const bundle = await loadBundle.run({ bundlePath: outputFile })
   const task = bundle[taskDescriptor.handler]
 
+  const tape = new RecordTape({
+    path: logsPath
+  })
+  tape.recordFrom(descriptorName, task)
+
   const res = await task.run(args)
+
+  await tape.save()
 
   return res
 }, {

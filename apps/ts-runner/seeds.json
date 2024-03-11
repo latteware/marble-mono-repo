@@ -1,5 +1,6 @@
 {
   "paths": {
+    "logs": "logs/",
     "tasks": "src/tasks/",
     "runners": "src/runners/"
   },

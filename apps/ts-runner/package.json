@@ -37,6 +37,7 @@
     "@marble-seeds/api": "*",
     "@marble-seeds/record-tape": "*",
     "@marble-seeds/task": "*",
-    "@marble-seeds/task-runner": "*"
+    "@marble-seeds/task-runner": "*",
+    "axios": "^1.6.7"
   }
 }

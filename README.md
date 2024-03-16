@@ -28,11 +28,13 @@ Write the code of your task to get price and delta based on a period of time
 
 `> seeds run-task stocks:get-delta --ticket AMZN|NVDA`
 
-#### Step 5 create a tests
+#### Step 5 create a tests file on task creation and have fixture functionality
 
 Make that a run task create a log item.
 
 Then allow the user to create a for this log item with:
+
+#### Step 6 upgrade project template
 
 `> seeds create-test stocks:get-delta`
 

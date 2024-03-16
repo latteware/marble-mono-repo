@@ -12,7 +12,9 @@ export const init = new Task(async function (argv: TastArgv) {
     paths: {
       logs: 'logs/',
       tasks: 'src/tasks/',
-      runners: 'src/runners/'
+      runners: 'src/runners/',
+      fixtures: 'src/tests/fixtures',
+      tests: 'src/tests/'
     }
   }
 

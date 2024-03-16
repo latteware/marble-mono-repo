@@ -2,7 +2,7 @@ import { Task } from '@marble-seeds/task'
 import Schema from '@marble-seeds/schema'
 import axios from 'axios'
 
-interface TastArgv {
+export interface TastArgv {
   ticker: string
   startDate: string
   endDate: string
@@ -22,8 +22,6 @@ export const getDelta = new Task(async function ({ ticker, startDate, endDate }:
 
   const deltaPrice = endPrice - startPrice
   const percentageChange = (deltaPrice / startPrice) * 100
-
-  console.log(`Delta Price: ${deltaPrice}, ${percentageChange}`)
 
   return {
     deltaPrice,

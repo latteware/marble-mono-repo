@@ -92,6 +92,17 @@ if (args.version !== undefined) {
   }).catch(err => {
     console.error('Opps!!!', err)
   })
+} else if (args._[0] === 'save-fixture') {
+  const saveFixture = runner.getTask('task:saveFixture')
+  console.log('Here?', args)
+
+  saveFixture.run({
+    descriptorName: args._[1]
+  }).then(res => {
+    console.log('Saved successfully:', res)
+  }).catch(err => {
+    console.error('Opps!!!', err)
+  })
 } else if (args._[0] === 'create-task') {
   const createTask = runner.getTask('task:create')
 

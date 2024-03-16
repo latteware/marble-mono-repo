@@ -11,7 +11,8 @@
     "coverage-report": "nyc  --reporter=html npm run test",
     "lint": "ts-standard",
     "lint:fix": "ts-standard --fix",
-    "prepack": "npm run lint && npm run build"
+    "prepack": "npm run lint && npm run test && npm run build",
+    "publish": "npm publish"
   },
   "bin": {
     "seeds": "./dist/bundle.js -- --source-map-support"

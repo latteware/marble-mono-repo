@@ -6,15 +6,11 @@ import Schema from '@marble-seeds/schema'
 
 import { bundleTask } from './bundleTask'
 import { loadBundle } from './loadBundle'
+import { type TaskDescriptor } from './types'
 
 interface TastArgv {
   descriptorName: string
   args: any
-}
-
-interface TaskDescriptor {
-  path: string
-  handler: string
 }
 
 export const runTask = new Task(async function ({ descriptorName, args }: TastArgv, {

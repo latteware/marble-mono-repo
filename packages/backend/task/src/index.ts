@@ -7,14 +7,14 @@ export type BaseFunction = (...args: any[]) => any
 
 export interface TaskConfig {
   validate?: any
-  mode?: string
+  mode?: Mode
   boundaries?: any
   boundariesData?: any
 }
 
 export interface TaskInstanceType {
-  getMode: () => string
-  setMode: (mode: string) => void
+  getMode: () => Mode
+  setMode: (mode: Mode) => void
   setCliHandlers: () => void
   setSchema: (base: any) => void
   getSchema: () => any
@@ -33,7 +33,7 @@ export interface TaskInstanceType {
 
 export const Task = class Task<Func extends BaseFunction> implements TaskInstanceType {
   _fn: Func
-  _mode: string
+  _mode: Mode
   _cli: boolean
   _coolDown: number
 
@@ -76,12 +76,11 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
     })
   }
 
-  getMode (): string {
+  getMode (): Mode {
     return this._mode
   }
 
-  setMode (mode: string): void {
-    console.log(mode)
+  setMode (mode: Mode): void {
     for (const name in this._boundaries) {
       const boundary = this._boundaries[name]
 

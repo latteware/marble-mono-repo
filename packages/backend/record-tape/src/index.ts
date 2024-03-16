@@ -1,7 +1,7 @@
 import fs from 'fs'
 import path from 'path'
 
-interface LogRecord {
+export interface LogRecord {
   name: string
   type: 'success' | 'error'
   input: any[]
@@ -32,7 +32,7 @@ function isErrorLogItem (log: SuccessLogItem | ErrorLogItem): log is ErrorLogIte
   return (log as ErrorLogItem).error !== undefined
 }
 
-type LogItem = SuccessLogItem | ErrorLogItem
+export type LogItem = SuccessLogItem | ErrorLogItem
 
 interface Config {
   path?: fs.PathLike
@@ -54,7 +54,7 @@ export const RecordTape = class RecordTape {
   }
 
   // Data functions
-  getLog (): any[] {
+  getLog (): LogRecord[] {
     return this._log
   }
 
@@ -84,6 +84,10 @@ export const RecordTape = class RecordTape {
     }
   }
 
+  addLogRecord (logRecord: LogRecord): void {
+    this._log.push(logRecord)
+  }
+
   stringify (): string {
     let log = ''
 
@@ -109,7 +113,7 @@ export const RecordTape = class RecordTape {
     return log
   }
 
-  compileCache (): any {
+  compileCache (): Record<string, any> {
     const cache: any = {}
 
     for (const logIteam of this._log) {

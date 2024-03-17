@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/seeds",
-  "version": "0.0.12",
+  "version": "0.0.15",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
@@ -11,15 +11,14 @@
     "coverage-report": "nyc  --reporter=html npm run test",
     "lint": "ts-standard",
     "lint:fix": "ts-standard --fix",
-    "prepack": "npm run lint && npm run test && npm run build",
-    "publish": "npm publish"
+    "prepack": "npm run lint && npm run test && npm run build"
   },
   "bin": {
-    "seeds": "./dist/bundle.js -- --source-map-support"
+    "seeds": "dist/bundle.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/latteware/seeds"
+    "url": "git+https://github.com/latteware/seeds.git"
   },
   "author": "Siedrix",
   "license": "MIT",

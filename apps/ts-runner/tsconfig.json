@@ -4,10 +4,7 @@
     "outDir": "./dist",
     "rootDir": "./src",
     "resolveJsonModule": true,
-    "esModuleInterop": true,
-    "paths": {
-      "~/*": ["./*"],
-    }
+    "esModuleInterop": true
   },
   "include": ["src/**/*"],
   "exclude": ["node_modules"]

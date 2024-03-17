@@ -8,7 +8,8 @@
     "test": "env TS_NODE_COMPILER_OPTIONS='{\"module\": \"commonjs\" }' mocha -r ts-node/register 'tests/**/*.ts'",
     "lint": "ts-standard -p tsconfig.eslint.json",
     "lint:fix": "ts-standard --fix --project tsconfig.eslint.json",
-    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
+    "prepack": "npm run lint && npm run test && npm run build",
+    "publish": "npm publish"
   },
   "repository": {
     "type": "git",

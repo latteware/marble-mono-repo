@@ -3,11 +3,13 @@ import Schema from '@marble-seeds/schema'
 
 import { getDelta } from './getDelta'
 
-interface TastArgv {
+export interface TastArgv {
   ticker: string
 }
 
-export const getPrice = new Task(async function ({ ticker }: TastArgv) {
+export const getPrice = new Task(async function ({ ticker }: TastArgv, {
+  getDelta
+}) {
   const today = new Date()
   const endDate = today.toISOString().split('T')[0]
 
@@ -15,11 +17,15 @@ export const getPrice = new Task(async function ({ ticker }: TastArgv) {
   start.setDate(today.getDate() - 30)
   const startDate = start.toISOString().split('T')[0]
 
-  const res = await getDelta.run({ ticker, startDate, endDate })
+  const res = await getDelta(ticker, startDate, endDate)
 
   return res
 }, {
-  boundaries: {}
+  boundaries: {
+    getDelta: async (ticker: string, startDate: string, endDate: string) => {
+      return await getDelta.run({ ticker, startDate, endDate })
+    }
+  }
 })
 
 getPrice.setSchema({

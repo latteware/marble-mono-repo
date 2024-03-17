@@ -94,7 +94,7 @@ if (args.version !== undefined) {
   })
 } else if (args._[0] === 'save-fixture') {
   const saveFixture = runner.getTask('task:saveFixture')
-  console.log('Here?', args)
+  console.log('Saving fixture: ', args._[1])
 
   saveFixture.run({
     descriptorName: args._[1]
@@ -111,6 +111,17 @@ if (args.version !== undefined) {
     taskPath: args.path
   }).then(res => {
     console.log('Created successfully:', res)
+  }).catch(err => {
+    console.error('Opps!!!', err)
+  })
+} else if (args._[0] === 'create-test') {
+  console.log('Creating', args.name)
+
+  const createTest = runner.getTask('task:createTest')
+  createTest.run({
+    taskName: args.name
+  }).then(res => {
+    console.log('Created successfully:', res.testFile)
   }).catch(err => {
     console.error('Opps!!!', err)
   })

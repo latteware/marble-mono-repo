@@ -9,7 +9,8 @@
     "coverage": "nyc npm run test",
     "coverage-report": "nyc  --reporter=html npm run test",
     "lint": "ts-standard -p tsconfig.json",
-    "publish": "npm run test && npm run lint && npm run build && npm publish --access public"
+    "prepack": "npm run lint && npm run test && npm run build",
+    "publish": "npm publish"
   },
   "author": "Siedrix",
   "license": "MIT",

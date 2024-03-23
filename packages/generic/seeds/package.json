@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/seeds",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {

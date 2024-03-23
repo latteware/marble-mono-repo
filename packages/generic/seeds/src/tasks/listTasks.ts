@@ -11,7 +11,8 @@ export const listTasks = new Task(async function (argv: TastArgv) {
   const raw = await fs.readFile(seedsPath, 'utf-8')
   const conf = JSON.parse(raw)
 
-  const tasks: string[] = conf.task ?? []
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+  const tasks: string[] = Object.keys(conf.tasks) ?? []
 
   console.log('Available tasks:')
   tasks.forEach(taskName => {

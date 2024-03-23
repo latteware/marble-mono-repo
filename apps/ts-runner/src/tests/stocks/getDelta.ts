@@ -1,4 +1,3 @@
-/* global describe, it */
 import { expect } from 'chai'
 import path from 'path'
 
@@ -20,11 +19,26 @@ getDelta.setBoundariesData(tape.compileCache())
 
 describe.only('stocks:getDelta tape', function () {
   tape.getLog().forEach((logRecord, i) => {
-    it(`Tape #${i}: ${JSON.stringify(logRecord.input)}`, async function () {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      const res = await getDelta.run(logRecord.input as unknown as TastArgv)
+    let label = `Tape #${i}: ${JSON.stringify(logRecord.input)} with success result`
 
-      expect(res).to.be.deep.equal(logRecord.output)
+    if (logRecord.error !== undefined) {
+      label = `Tape #${i}: ${JSON.stringify(logRecord.input)} with error`
+    }
+    it(label, async function () {
+      let res, error: Error | undefined
+      try {
+        res = await getDelta.run(logRecord.input as unknown as TastArgv)
+      } catch (e) {
+        error = e
+      }
+
+      if (error !== undefined) {
+        expect(res).to.be.equal(undefined)
+        expect(error.message).to.be.equal(logRecord.error)
+      } else {
+        expect(res).to.be.deep.equal(logRecord.output)
+        expect(error).to.be.equal(undefined)
+      }
     })
   })
 })

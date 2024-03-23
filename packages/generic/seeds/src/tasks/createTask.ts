@@ -10,7 +10,6 @@ const templatePath = p.resolve(__dirname, '../templates/task.hbs')
 
 interface TastArgv {
   taskDescriptor: string
-  taskPath: string
 }
 
 interface TaskName {
@@ -20,7 +19,7 @@ interface TaskName {
   dir?: string
 }
 
-export const createTask = new Task(async function ({ taskDescriptor, taskPath }: TastArgv, {
+export const createTask = new Task(async function ({ taskDescriptor }: TastArgv, {
   loadTemplate,
   persistTask,
   loadConf,
@@ -28,6 +27,9 @@ export const createTask = new Task(async function ({ taskDescriptor, taskPath }:
   parseTaskName
 }) {
   const { taskName, fileName, descriptor, dir } = await parseTaskName(taskDescriptor) as TaskName
+
+  const seeds = await loadConf()
+  let taskPath: string = seeds.paths.tasks
 
   if (dir !== undefined) {
     taskPath = path.join(taskPath, dir)
@@ -41,8 +43,6 @@ export const createTask = new Task(async function ({ taskDescriptor, taskPath }:
   Into: ${taskPath}
   ==================================================
   `)
-
-  const seeds = await loadConf()
 
   const template = await loadTemplate()
   const comp = Handlebars.compile(template)

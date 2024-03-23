@@ -13,7 +13,6 @@ const tape = new RecordTape({
 })
 
 tape.loadSync()
-console.log('cache ->', tape.compileCache().fetchDelta)
 
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 getPrice.setBoundariesData(tape.compileCache())

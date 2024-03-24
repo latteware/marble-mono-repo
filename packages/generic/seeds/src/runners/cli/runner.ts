@@ -15,6 +15,7 @@ import { createRunner } from '../../tasks/runner/create'
 export const runner = new Runner()
 
 runner.load('init', init)
+
 runner.load('task:list', listTasks)
 runner.load('task:create', createTask)
 runner.load('task:createTest', createTest)

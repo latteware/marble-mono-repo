@@ -5,7 +5,7 @@ import Schema from '@marble-seeds/schema'
 
 import { bundle as bundleTask } from './bundle/create'
 import { loadBundle } from './bundle/load'
-import { load as loadConf} from './conf/load'
+import { load as loadConf } from './conf/load'
 import { type SeedsConf } from './types'
 
 interface TastArgv {

@@ -49,7 +49,8 @@ export const createTask = new Task(async function ({ taskDescriptor }: TastArgv,
   const template = await loadTemplate()
   const comp = Handlebars.compile(template)
   const content = comp({
-    taskName
+    taskName,
+    taskDescriptor
   })
 
   await persistTask(taskPath, fileName, content)

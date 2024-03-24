@@ -1,4 +1,4 @@
-import { install } from 'source-map-support'
+import { install as addSourceMapSupport } from 'source-map-support'
 
 import { Runner } from '@marble-seeds/runner'
 
@@ -14,7 +14,7 @@ import { createTest } from '../../tasks/createTest'
 // runner
 import { createRunner } from '../../tasks/runners/create'
 
-install()
+addSourceMapSupport()
 
 export const runner = new Runner()
 

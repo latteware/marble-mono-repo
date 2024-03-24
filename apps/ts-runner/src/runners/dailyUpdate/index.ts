@@ -1,12 +1,12 @@
 import { Runner } from '@marble-seeds/runner'
 
 // Import tasks
-// import { task } from '../../tasks/name'
+import { getPrice } from '../../tasks/stocks/getPrice'
 
 export const runner = new Runner()
 
 // Load task into runner
-// runner.load('taskName', task)
+runner.load('stocks:getPrice', getPrice)
 
 runner.pargeArguments = function (data) {
   console.log('->', data)

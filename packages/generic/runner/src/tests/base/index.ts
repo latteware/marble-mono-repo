@@ -76,4 +76,11 @@ describe('Base test', function () {
     expect(int2).to.equal(11)
     expect(int3).to.equal(11)
   })
+
+  it('Should get task undefined if task doesnt exit', async function () {
+    const runner = new Runner()
+    const task = runner.getTask('int')
+
+    expect(task).to.equal(undefined)
+  })
 })

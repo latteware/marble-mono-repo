@@ -49,6 +49,16 @@ const cli = async function (): Promise<void> {
 
     const outcome = await init.run({})
     console.log('Init', outcome)
+  } else if (args._[0] === 'run' && args._[1] !== undefined) {
+    const argv = parseRunnerArgs(args)
+    const current = runner.getTask('runner:run')
+
+    const res = await current.run({
+      runnerName: args._[1],
+      taskName: argv.taskName,
+      params: argv.params
+    })
+    console.log('Run successfully:', res)
   } else if (args._[0] === 'run-task' && args._[1] !== undefined) {
     const argv = parseRunnerArgs(args)
     const runTask = runner.getTask('task:run')

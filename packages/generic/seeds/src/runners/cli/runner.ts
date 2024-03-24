@@ -13,6 +13,7 @@ import { createTest } from '../../tasks/createTest'
 
 // runner
 import { createRunner } from '../../tasks/runners/create'
+import { run as runCurrentRunner } from '../../tasks/runners/run'
 
 addSourceMapSupport()
 
@@ -27,3 +28,4 @@ runner.load('task:run', runTask)
 runner.load('task:saveFixture', saveFixture)
 
 runner.load('runner:create', createRunner)
+runner.load('runner:run', runCurrentRunner)

@@ -87,6 +87,10 @@ export const Runner = class {
   }
 
   getTask (name: string): any | undefined {
+    if (this._tasks[name] === undefined) {
+      return undefined
+    }
+
     const { task } = this._tasks[name]
 
     return task

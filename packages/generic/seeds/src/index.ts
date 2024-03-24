@@ -83,6 +83,14 @@ const cli = async function (): Promise<void> {
       taskName: args.name
     })
     console.log('Created successfully:', res.testFile)
+  } else if (args._[0] === 'create-runner') {
+    const createRunner = runner.getTask('runner:create')
+    console.log('Creating', args.name)
+
+    const res = await createRunner.run({
+      runnerName: args.name
+    })
+    console.log('Created successfully:', res)
   } else {
     console.error('Invalid options')
     process.exit(1)

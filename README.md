@@ -6,25 +6,29 @@ This is managed by NX. To list all the projects over here do `nx show projects`.
 
 Objective: Be able to create a runner, running locally and  deploy flow to the runner to a lambda
 
-#### Step 1 create a runner
+#### [Done] Step 1 create a runner
 
 `> seeds create-runner stocks`
 
 This runner will need to create a index.ts, a version file, a handler file and a terraform file.
 
-#### Step 2 add tasks to the runner and a handler
+#### Step 2 Add to runner lib a handler and parse args functions
+
+Make runners be able to handler how to parse args and have a runner.handle so it starts to match the CLI and Lambda flows.
+
+#### Step 3 add tasks to the runner and a handler
 
 Add task to runner
 
-#### Step 3 Run it locally on cli
+#### Step 4 Run it locally on cli
 
 Run the multiple task on the runner locally
 
-#### Step 4 bundle and upload runner to S3
+#### Step 5 bundle and upload runner to S3
 
 Bundle the runner and Upload the file to S3
 
-#### Step 5 Deploy lambda using the S3 file
+#### Step 6 Deploy lambda using the S3 file
 
 Create a lambda using terraform that loads the bundle from S3 and its able to run the task on the UI
 

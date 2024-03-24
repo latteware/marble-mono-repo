@@ -7,13 +7,14 @@ interface TastArgv {
   outputFile: string
 }
 
-export const bundleTask = new Task(async function ({ entryPoint, outputFile }: TastArgv) {
+export const bundle = new Task(async function ({ entryPoint, outputFile }: TastArgv) {
   await esbuild.build({
     entryPoints: [entryPoint],
     outfile: outputFile,
     bundle: true,
     minify: true,
-    platform: 'node'
+    platform: 'node',
+    sourcemap: true
   })
 
   const status = { status: 'Ok' }
@@ -23,7 +24,7 @@ export const bundleTask = new Task(async function ({ entryPoint, outputFile }: T
   boundaries: {}
 })
 
-bundleTask.setSchema({
+bundle.setSchema({
   entryPoint: Schema.types.string,
   outputFile: Schema.types.string
 })

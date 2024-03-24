@@ -1,3 +1,5 @@
+import { install as addSourceMapSupport } from 'source-map-support'
+
 import { Runner } from '@marble-seeds/runner'
 
 import { init } from '../../tasks/init'
@@ -10,7 +12,9 @@ import { saveFixture } from '../../tasks/saveFixture'
 import { createTest } from '../../tasks/createTest'
 
 // runner
-import { createRunner } from '../../tasks/runner/create'
+import { createRunner } from '../../tasks/runners/create'
+
+addSourceMapSupport()
 
 export const runner = new Runner()
 

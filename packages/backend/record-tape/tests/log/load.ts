@@ -39,7 +39,7 @@ describe('Load async', function () {
     }
 
     expect(err).to.not.equal(undefined)
-    expect(err.message).to.equal('Folder doesn\'t exists')
+    expect(err.message).to.equal('Logs folder doesn\'t exists')
   })
 
   it('Load async from file that doesnt exist', async function () {
@@ -87,7 +87,7 @@ describe('Load sync', function () {
     }
 
     expect(err).to.not.equal(undefined)
-    expect(err.message).to.equal('Folder doesn\'t exists')
+    expect(err.message).to.equal('Logs folder doesn\'t exists')
   })
 
   it('Load sync from file that doesnt exist', async function () {

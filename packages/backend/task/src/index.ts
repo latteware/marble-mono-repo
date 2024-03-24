@@ -59,7 +59,6 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
     }
 
     this._mode = conf.mode ?? 'proxy'
-
     this._boundariesDefinition = conf.boundaries ?? {}
 
     this._listener = undefined
@@ -210,6 +209,15 @@ export const Task = class Task<Func extends BaseFunction> implements TaskInstanc
       const boundary = boundaries[name]
 
       boundary.startRun()
+    }
+  }
+
+  // ToDo: Define Types from asBoundary function
+  // eslint-disable-next-line @typescript-eslint/explicit-function-return-type
+  asBoundary () {
+    return async (args: any) => {
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+      return await this.run(args)
     }
   }
 

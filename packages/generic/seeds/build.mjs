@@ -8,6 +8,5 @@ build({
   sourcemap: true,
   platform: 'node',
   target: 'node18',
-  sourcemap: true,
   external: ['esbuild']
 }).catch(() => process.exit(1))

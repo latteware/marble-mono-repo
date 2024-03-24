@@ -1,0 +1,19 @@
+{
+  "paths": {
+    "logs": "logs/",
+    "tasks": "src/tasks/",
+    "runners": "src/runners/",
+    "fixtures": "src/tests/fixtures",
+    "tests": "src/tests/"
+  },
+  "tasks": {
+    "runner:create": {
+      "path": "src/tasks/runner/create.ts",
+      "handler": "createRunner"
+    },
+    "conf:load": {
+      "path": "src/tasks/conf/load.ts",
+      "handler": "load"
+    }
+  }
+}

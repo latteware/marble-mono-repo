@@ -5,6 +5,8 @@ import path from 'path'
 import fs from 'fs/promises'
 import camelCase from 'camelcase'
 
+import { load } from './conf/load'
+
 const p = path
 const templatePath = p.resolve(__dirname, '../templates/task.hbs')
 
@@ -94,11 +96,7 @@ export const createTask = new Task(async function ({ taskDescriptor }: TastArgv,
       }
     },
     loadConf: async () => {
-      const seedsPath = path.join(process.cwd(), 'seeds.json')
-      const raw = await fs.readFile(seedsPath, 'utf-8')
-      const conf = JSON.parse(raw)
-
-      return conf
+      return await load.run({})
     },
     persistConf: async (seeds) => {
       const seedsPath = path.join(process.cwd(), 'seeds.json')

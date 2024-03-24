@@ -18,9 +18,6 @@ export const init = new Task(async function (argv: TastArgv) {
     }
   }
 
-  console.log('Should init a project on', seedsPath)
-  console.log('Init config', config)
-
   await fs.writeFile(seedsPath, JSON.stringify(config, null, 2))
   console.log('seeds.json has been created')
 

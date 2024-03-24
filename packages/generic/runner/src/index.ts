@@ -130,4 +130,19 @@ export const Runner = class {
     const tapePath = path.resolve(__dirname, `../../${this._folderPath as string}/${name}.log`)
     await fsPromises.unlink(tapePath)
   }
+
+  async handler (data: any): Promise<any> {
+    const { taskName, args }: { taskName: string, args: any } = this.pargeArguments(data)
+
+    const res = await this.run(taskName, args)
+
+    return res
+  }
+
+  pargeArguments (data: any): { taskName: string, args: any } {
+    return {
+      taskName: data.task,
+      args: data.args
+    }
+  }
 }

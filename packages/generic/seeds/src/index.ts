@@ -100,6 +100,6 @@ const cli = async function (): Promise<void> {
 }
 
 cli().catch((e) => {
-  console.log('Error:', e.message)
+  console.log('Error:', e)
   process.exit(1)
 })

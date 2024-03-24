@@ -4,9 +4,9 @@ import { Task } from '@marble-seeds/task'
 import { RecordTape } from '@marble-seeds/record-tape'
 import Schema from '@marble-seeds/schema'
 
-import { bundleTask } from './bundleTask'
-import { loadBundle } from './loadBundle'
-import { type TaskDescriptor } from './types'
+import { bundle as bundleTask } from './bundle/create'
+import { loadBundle } from './bundle/load'
+import { type SeedsConf } from './types'
 
 interface TastArgv {
   descriptorName: string
@@ -16,10 +16,10 @@ interface TastArgv {
 export const runTask = new Task(async function ({ descriptorName, args }: TastArgv, {
   loadConf
 }) {
-  const seeds = await loadConf()
-  const taskDescriptor = seeds.tasks[descriptorName] as TaskDescriptor
+  const seeds: SeedsConf = await loadConf()
+  const taskDescriptor = seeds.tasks[descriptorName]
 
-  const logsPath = path.join(process.cwd(), 'logs', descriptorName)
+  const logsPath = path.join(process.cwd(), seeds.paths.logs, descriptorName)
   const entryPoint = path.join(process.cwd(), taskDescriptor.path)
   const outputFile = path.resolve(__dirname, '../.builds', `${descriptorName}.js`)
 

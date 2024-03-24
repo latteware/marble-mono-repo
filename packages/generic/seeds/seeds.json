@@ -7,13 +7,18 @@
     "tests": "src/tests/"
   },
   "tasks": {
-    "runner:create": {
-      "path": "src/tasks/runner/create.ts",
+    "runners:create": {
+      "path": "src/tasks/runners/create.ts",
       "handler": "createRunner"
     },
     "conf:load": {
       "path": "src/tasks/conf/load.ts",
       "handler": "load"
+    },
+    "runners:run": {
+      "path": "src/tasks/runners/run.ts",
+      "handler": "run"
     }
-  }
+  },
+  "runners": {}
 }

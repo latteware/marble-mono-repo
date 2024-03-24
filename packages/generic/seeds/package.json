@@ -36,7 +36,7 @@
     "test"
   ],
   "dependencies": {
-    "@marble-seeds/record-tape": "^0.8.0-rc.3",
+    "@marble-seeds/record-tape": "^0.8.0-rc.5",
     "@marble-seeds/runner": "^0.1.2",
     "@marble-seeds/task": "^1.0.0-rc.8",
     "@types/node": "^20.10.6",

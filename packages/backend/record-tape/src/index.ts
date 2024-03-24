@@ -153,7 +153,7 @@ export const RecordTape = class RecordTape {
     try {
       await fs.promises.access(dirpath)
     } catch (error) {
-      throw new Error('Folder doesn\'t exists')
+      throw new Error('Logs folder doesn\'t exists')
     }
 
     if (typeof this._path === 'undefined') { return }
@@ -183,7 +183,7 @@ export const RecordTape = class RecordTape {
     try {
       fs.accessSync(dirpath)
     } catch (error) {
-      throw new Error('Folder doesn\'t exists')
+      throw new Error('Logs folder doesn\'t exists')
     }
 
     if (!fs.existsSync(this._path)) {

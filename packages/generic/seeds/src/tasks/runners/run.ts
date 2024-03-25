@@ -32,16 +32,12 @@ export const run = new Task(async function ({ runnerName, taskName, params }: Ta
     throw new Error(`No task found for ${taskName} on runner ${runnerName}`)
   }
 
-  let res, error: Error | undefined
+  let res
   try {
     res = await task.run(params)
-  } catch (e) {
-    console.log('Error ->', e.message)
-    error = e
-  }
-
-  if (error !== undefined) {
-    throw new Error(error.message)
+  } catch (error) {
+    console.error('Error:', error)
+    throw error
   }
 
   return res

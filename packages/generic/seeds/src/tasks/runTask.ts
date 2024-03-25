@@ -40,19 +40,15 @@ export const runTask = new Task(async function ({ descriptorName, args }: TastAr
   })
   tape.recordFrom(descriptorName, task)
 
-  let res, error: Error | undefined
+  let res
   try {
     res = await task.run(args)
-  } catch (e) {
-    console.log('Error ->', e.message)
-    error = e
+  } catch (error) {
+    await tape.save()
+    throw error
   }
 
   await tape.save()
-
-  if (error !== undefined) {
-    throw new Error(error.message)
-  }
 
   return res
 }, {

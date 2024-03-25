@@ -9,7 +9,7 @@ import { Runner } from '../../index'
 const logContent = '{"name":"test","type":"success","input":{},"output":"hi five!!!","boundaries":{}}\n'
 
 describe('[Task runner]Tape tests', function () {
-  it.only('Should run a task and check that a log item was created', async function () {
+  it('Should run a task and check that a log item was created', async function () {
     const tapeFilePath = path.resolve(__dirname, '../fixtures/status.log')
     try {
       await fs.unlink(tapeFilePath)
@@ -37,7 +37,7 @@ describe('[Task runner]Tape tests', function () {
   })
 })
 
-describe.only('[Task runner]Validate log folder', function () {
+describe('[Task runner]Validate log folder', function () {
   it('Should fail to set a tape folder that doesn\'t exists, sync version', function () {
     const runner = new Runner()
 

@@ -2,60 +2,101 @@
 
 This is managed by NX. To list all the projects over here do `nx show projects`. Still everything is to early to show but its something.
 
-### Mileston 2: Create and deploy a runneres
+## Getting started
 
-Objective: Be able to create a runner, running locally and  deploy flow to the runner to a lambda
+To start create a new github project using [the project template](https://github.com/latteware/marble-app-project-template) on Github and install the CLI with
 
-#### [Done] Step 1 create a runner
+```
+npm i -g @marble-seeds/seeds
+```
 
-`> seeds create-runner stocks`
+## Cli commands
 
-This runner will need to create a index.ts, a version file, a handler file and a terraform file.
 
-#### Step 2 Add to runner lib a handler and parse args functions
 
-Make runners be able to handler how to parse args and have a runner.handle so it starts to match the CLI and Lambda flows.
+## Task
 
-#### Step 3 add tasks to the runner and a handler
+#### Create a task
 
-Add task to runner
+To create a new task do:
 
-#### Step 4 Run it locally on cli
+```
+seeds task:create TASK_NAME
+```
 
-Run the multiple task on the runner locally
+Task names usually are MODULE:ACTION like stocks:getPrice
 
-#### Step 5 bundle and upload runner to S3
+#### Run task
 
-Bundle the runner and Upload the file to S3
+```
+seeds task:run TASK_NAME --param value
+```
 
-#### Step 6 Deploy lambda using the S3 file
+Example
 
-Create a lambda using terraform that loads the bundle from S3 and its able to run the task on the UI
+```
+seeds task:run stocks:getDelta --ticker="BRK-B" --startDate "2024-01-10" --endDate
+"2024-03-20"
+```
 
-## Future milestones
+#### Create test for a task
 
-### Milestone: Interactive CLI
+Create a test for your task can be done with
 
-Objective: Add [inquirer](https://www.npmjs.com/package/inquirer) to the CLI to allow an interactive experieces
+```
+seeds task:createTest TASK_NAME
+```
 
-### Milestone: Load a Runner on the UI
+#### Save fixture for a task
 
-Objective: Allow a CRA, Nextjs or Expo project to load a runner and have it load or mutada data
+This will add a fixture from the last execution to your test
 
-### Milestone: DynamoDB data store
+```
+seeds task:createTest TASK_NAME
+```
 
-Objective: Create a datastore with DynamoDB as backed using Marble Schemas to define the table schema
+Aftet that do `npm test` to run the text based on the fixtures that you have saves
 
-### Milestone: Runner pre funcion per env
+#### List task
 
-Objective: Allow runners to define a pre function(that is a task) with and env(local, ui, lambda) so it can process the inputs easier.
+```
+seeds task:list
+```
 
-Use case: A lambda event for a S3 file should be parsed so the tasks can be created easilly, while on local it can be runned with a simple uuid and bucket param
+## Runner
 
-## Projects to research
+#### Create a runner
 
-#### Typia
+```
+seeds runner:create RUNNER_NAME
+```
 
-[Typia Docs](https://typia.io/docs/)
+#### Run a target runner
 
-This project allows to create validators from typescript types on the fly. This could be a great way to handle schema validation instead or on top of Joi.
+```
+seeds runner:run RUNNER_NAME --param value
+```
+
+#### List task on target runner
+
+```
+seeds runner:list RUNNER_NAME
+```
+
+## Other
+
+#### Info
+
+Will provide current seeds version
+
+```
+seeds info
+```
+
+#### Init
+
+Will create a seeds.json file. This file is needed on the root of the project. Will describe available tasks, runners and paths on the repo.
+
+```
+seeds init
+```

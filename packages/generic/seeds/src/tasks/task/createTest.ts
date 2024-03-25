@@ -9,7 +9,7 @@ const p = path
 const templatePath = p.resolve(__dirname, '../templates/test.hbs')
 
 interface TastArgv {
-  taskName: string
+  descriptorName: string
 }
 
 interface TaskDescriptor {
@@ -28,7 +28,7 @@ interface ProjectPaths {
   tests: string
 }
 
-export const createTest = new Task(async function ({ taskName }: TastArgv, {
+export const createTest = new Task(async function ({ descriptorName }: TastArgv, {
   loadConf,
   loadTemplate,
   getTaskDescriptor,
@@ -37,7 +37,7 @@ export const createTest = new Task(async function ({ taskName }: TastArgv, {
   const seeds = await loadConf()
 
   const projectPaths: ProjectPaths = seeds.paths
-  const taskDescriptor: TaskDescriptor = await getTaskDescriptor(taskName, seeds)
+  const taskDescriptor: TaskDescriptor = await getTaskDescriptor(descriptorName, seeds)
 
   const taskPath = path.resolve(process.cwd(), taskDescriptor.taskPath)
   const testFolder = path.resolve(process.cwd(), projectPaths.tests, taskDescriptor.dir ?? '')
@@ -47,14 +47,14 @@ export const createTest = new Task(async function ({ taskName }: TastArgv, {
 
   const template = await loadTemplate()
   const content = template({
-    taskName,
+    descriptorName,
     path: relativePath,
     handler: taskDescriptor.handler
   })
 
   await persistFile(testFolder, testFile, content)
 
-  return { taskName, content, testFile, testFolder, relativePath, taskPath }
+  return { descriptorName, content, testFile, testFolder, relativePath, taskPath }
 }, {
   boundaries: {
     loadConf: async () => {
@@ -117,5 +117,5 @@ export const createTest = new Task(async function ({ taskName }: TastArgv, {
 })
 
 createTest.setSchema({
-  taskName: Schema.types.string
+  descriptorName: Schema.types.string
 })

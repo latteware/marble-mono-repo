@@ -9,7 +9,7 @@ import { load } from '../conf/load'
 import { type SeedsConf } from '../types'
 
 export interface TastArgv {
-  runnerName: string
+  descriptorName: string
 }
 
 const templatePath = path.resolve(__dirname, '../templates/runner.hbs')
@@ -17,7 +17,7 @@ const templatePath = path.resolve(__dirname, '../templates/runner.hbs')
 export const createRunner = new Task(async function (argv: TastArgv, { loadConf, loadTemplate, persistRunner, persistConf }) {
   const seeds: SeedsConf = await loadConf()
 
-  const name = camelCase(argv.runnerName)
+  const name = camelCase(argv.descriptorName)
   const runnerPath = path.join(seeds.paths.runners, name)
   const fullPath = `${runnerPath}/index.ts`
 
@@ -86,5 +86,5 @@ export const createRunner = new Task(async function (argv: TastArgv, { loadConf,
 })
 
 createRunner.setSchema({
-  runnerName: Schema.types.string
+  descriptorName: Schema.types.string
 })

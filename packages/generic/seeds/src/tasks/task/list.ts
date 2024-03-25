@@ -6,7 +6,7 @@ import fs from 'fs/promises'
 // eslint-disable-next-line @typescript-eslint/no-empty-interface
 interface TastArgv {}
 
-export const listTasks = new Task(async function (argv: TastArgv) {
+export const list = new Task(async function (argv: TastArgv) {
   const seedsPath = path.join(process.cwd(), 'seeds.json')
   const raw = await fs.readFile(seedsPath, 'utf-8')
   const conf = JSON.parse(raw)
@@ -24,4 +24,4 @@ export const listTasks = new Task(async function (argv: TastArgv) {
   boundaries: {}
 })
 
-listTasks.setSchema({})
+list.setSchema({})

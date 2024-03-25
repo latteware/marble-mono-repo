@@ -5,13 +5,13 @@ import path from 'path'
 import fs from 'fs/promises'
 import camelCase from 'camelcase'
 
-import { load } from './conf/load'
+import { load } from '../conf/load'
 
 const p = path
 const templatePath = p.resolve(__dirname, '../templates/task.hbs')
 
 interface TastArgv {
-  taskDescriptor: string
+  descriptorName: string
 }
 
 interface TaskName {
@@ -21,14 +21,14 @@ interface TaskName {
   dir?: string
 }
 
-export const createTask = new Task(async function ({ taskDescriptor }: TastArgv, {
+export const create = new Task(async function ({ descriptorName }: TastArgv, {
   loadTemplate,
   persistTask,
   loadConf,
   persistConf,
   parseTaskName
 }) {
-  const { taskName, fileName, descriptor, dir } = await parseTaskName(taskDescriptor) as TaskName
+  const { taskName, fileName, descriptor, dir } = await parseTaskName(descriptorName) as TaskName
 
   const seeds = await loadConf()
   let taskPath: string = seeds.paths.tasks
@@ -126,7 +126,6 @@ export const createTask = new Task(async function ({ taskDescriptor }: TastArgv,
   }
 })
 
-createTask.setSchema({
-  taskDescriptor: Schema.types.string,
-  taskPath: Schema.types.string
+create.setSchema({
+  descriptorName: Schema.types.string
 })

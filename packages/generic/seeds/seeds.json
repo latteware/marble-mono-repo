@@ -7,17 +7,33 @@
     "tests": "src/tests/"
   },
   "tasks": {
-    "runners:create": {
-      "path": "src/tasks/runners/create.ts",
-      "handler": "createRunner"
-    },
     "conf:load": {
       "path": "src/tasks/conf/load.ts",
       "handler": "load"
     },
+    "conf:version": {
+      "path": "src/tasks/conf/version.ts",
+      "handler": "getVersion"
+    },
+    "task:create": {
+      "path": "src/tasks/task/create.ts",
+      "handler": "create"
+    },
+    "task:run": {
+      "path": "src/tasks/task/run.ts",
+      "handler": "runTask"
+    },
+    "runners:create": {
+      "path": "src/tasks/runner/create.ts",
+      "handler": "create"
+    },
     "runners:run": {
-      "path": "src/tasks/runners/run.ts",
+      "path": "src/tasks/runner/run.ts",
       "handler": "run"
+    },
+    "runner:list": {
+      "path": "src/tasks/runner/list.ts",
+      "handler": "list"
     }
   },
   "runners": {}

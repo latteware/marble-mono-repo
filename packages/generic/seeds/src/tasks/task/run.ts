@@ -3,17 +3,17 @@ import { Task } from '@marble-seeds/task'
 import { RecordTape } from '@marble-seeds/record-tape'
 import Schema from '@marble-seeds/schema'
 
-import { bundle as bundleTask } from './bundle/create'
-import { loadBundle } from './bundle/load'
-import { load as loadConf } from './conf/load'
-import { type SeedsConf } from './types'
+import { bundle as bundleTask } from '../bundle/create'
+import { loadBundle } from '../bundle/load'
+import { load as loadConf } from '../conf/load'
+import { type SeedsConf } from '../types'
 
 interface TastArgv {
   descriptorName: string
   args: any
 }
 
-export const runTask = new Task(async function ({ descriptorName, args }: TastArgv, {
+export const run = new Task(async function ({ descriptorName, args }: TastArgv, {
   loadConf
 }) {
   const seeds: SeedsConf = await loadConf()
@@ -57,7 +57,7 @@ export const runTask = new Task(async function ({ descriptorName, args }: TastAr
   }
 })
 
-runTask.setSchema({
+run.setSchema({
   descriptorName: Schema.types.string,
   args: Schema.types.any
 })

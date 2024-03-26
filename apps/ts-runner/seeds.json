@@ -6,6 +6,10 @@
     "fixtures": "src/tests/fixtures",
     "tests": "src/tests/"
   },
+  "infra": {
+    "region": "us-west-2",
+    "bucket": "cdktf-sandbox"
+  },
   "tasks": {
     "stocks:getDelta": {
       "handler": "getDelta",

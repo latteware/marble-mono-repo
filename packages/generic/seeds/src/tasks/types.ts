@@ -7,6 +7,11 @@ export interface TaskDescriptor {
   handler: string
 }
 
+export interface Infra {
+  region: string
+  bucket: string
+}
+
 export interface SeedsConf {
   paths: {
     logs: string
@@ -15,6 +20,7 @@ export interface SeedsConf {
     fixtures: string
     tests: string
   }
+  infra: Infra
   tasks: Record<string, TaskDescriptor>
   runners: Record<string, RunnerDescriptor>
 }

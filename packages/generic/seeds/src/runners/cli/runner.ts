@@ -15,6 +15,7 @@ import { createTest } from '../../tasks/task/createTest'
 // runner
 import { createRunner } from '../../tasks/runner/create'
 import { run as runCurrentRunner } from '../../tasks/runner/run'
+import { upload } from '../../tasks/runner/upload'
 import { list as listCurrentRunner } from '../../tasks/runner/list'
 
 addSourceMapSupport()
@@ -38,6 +39,7 @@ runner.load('task:saveFixture', saveFixture)
 
 runner.load('runner:create', createRunner)
 runner.load('runner:run', runCurrentRunner)
+runner.load('runner:upload', upload)
 runner.load('runner:list', listCurrentRunner)
 
 runner.pargeArguments = function (data) {
@@ -52,7 +54,6 @@ runner.pargeArguments = function (data) {
 
 runner.handler = async function (data) {
   const { taskName, action, args }: InputArgs = runner.pargeArguments(data)
-  console.log('->', taskName, action, args)
 
   const task = runner.getTask(taskName)
   if (task === undefined) {
@@ -61,18 +62,24 @@ runner.handler = async function (data) {
   }
 
   console.log('================================================')
-  console.log(`Running ${taskName} with ${JSON.stringify(args)}`)
+  console.log(`Seeds: ${taskName} ${action ?? ''} with ${JSON.stringify(args)}`)
   console.log('================================================')
 
   let res
-  if (['task:create', 'task:createTest', 'task:saveFixture', 'runner:create', 'runner:list'].includes(taskName)) {
-    console.log('Here ->', action)
+  if ([
+    'task:create',
+    'task:createTest',
+    'task:saveFixture',
+    'runner:create',
+    'runner:upload',
+    'runner:list'
+  ].includes(taskName)) {
     res = await task.run({
       descriptorName: action
     })
   } else if (taskName === 'runner:run') {
     const { task: taskDescriptor, ...params } = args
-    console.log('->', taskDescriptor, params)
+
     res = await task.run({
       runnerName: action,
       taskName: taskDescriptor,

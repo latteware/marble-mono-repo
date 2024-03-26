@@ -17,7 +17,7 @@ tape.loadSync()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 getDelta.setBoundariesData(tape.compileCache())
 
-describe.only('stocks:getDelta tape', function () {
+describe('stocks:getDelta tape', function () {
   tape.getLog().forEach((logRecord, i) => {
     let label = `Tape #${i}: ${JSON.stringify(logRecord.input)} with success result`
 

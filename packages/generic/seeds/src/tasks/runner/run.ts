@@ -17,6 +17,10 @@ export const run = new Task(async function ({ runnerName, taskName, params }: Ta
   const seeds: SeedsConf = await loadConf({})
   const runnerDescriptor = seeds.runners[runnerName]
 
+  if (runnerDescriptor === undefined) {
+    throw new Error('Runner not found')
+  }
+
   const entryPoint = path.join(process.cwd(), runnerDescriptor.path)
   const outputFile = path.resolve(__dirname, '../.builds', `${runnerName}.js`)
 

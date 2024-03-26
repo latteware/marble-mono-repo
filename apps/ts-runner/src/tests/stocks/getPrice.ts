@@ -17,7 +17,7 @@ tape.loadSync()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 getPrice.setBoundariesData(tape.compileCache())
 
-describe.only('stocks:getPrice tape', function () {
+describe('stocks:getPrice tape', function () {
   tape.getLog().forEach((logRecord, i) => {
     let label = `Tape #${i}: ${JSON.stringify(logRecord.input)} with success result`
 

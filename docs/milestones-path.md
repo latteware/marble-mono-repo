@@ -26,13 +26,15 @@ Run the multiple task on the runner locally
 
 **Sidequest:** Migrate seeds to use this runners flow
 
-#### Step 5 bundle and upload runner to S3
+#### [Done] Step 5 bundle and upload runner to S3
 
-Bundle the runner and Upload the file to S3
+Bundle the runner and Upload the file to S3. Needs to build with esbuild and then zip it. For this you already need to have a bucket on the project.
 
 #### Step 6 Deploy lambda using the S3 file
 
-Create a lambda using terraform that loads the bundle from S3 and its able to run the task on the UI
+Create a lambda using terraform that loads the bundle from S3 and its able to run the task on the UI.
+
+Does the deploy happens inside seeds cli? Or happens on the project?
 
 #### Step 7 Add logs to runners
 

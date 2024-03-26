@@ -7,7 +7,7 @@ import { {{handler}}, type TastArgv } from '{{path}}'
 
 {{handler}}.setMode('replay')
 
-const tapePath = path.resolve(__dirname, '../fixtures/{{taskName}}')
+const tapePath = path.resolve(__dirname, '../fixtures/{{descriptorName}}')
 const tape = new RecordTape({
   path: tapePath
 })
@@ -17,7 +17,7 @@ tape.loadSync()
 // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 {{handler}}.setBoundariesData(tape.compileCache())
 
-describe.only('{{taskName}} tape', function () {
+describe('{{descriptorName}} tape', function () {
   tape.getLog().forEach((logRecord, i) => {
     let label = `Tape #${i}: ${JSON.stringify(logRecord.input)} with success result`
 

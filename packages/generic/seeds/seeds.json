@@ -6,6 +6,10 @@
     "fixtures": "src/tests/fixtures",
     "tests": "src/tests/"
   },
+  "infra": {
+    "region": "us-west-2",
+    "bucket": "seeds"
+  },
   "tasks": {
     "conf:load": {
       "path": "src/tasks/conf/load.ts",
@@ -34,6 +38,22 @@
     "runner:list": {
       "path": "src/tasks/runner/list.ts",
       "handler": "list"
+    },
+    "runner:upload": {
+      "path": "src/tasks/runner/upload.ts",
+      "handler": "upload"
+    },
+    "bundle:zip": {
+      "path": "src/tasks/bundle/zip.ts",
+      "handler": "zip"
+    },
+    "runner:remoteExec": {
+      "path": "src/tasks/runner/remoteExec.ts",
+      "handler": "remoteExec"
+    },
+    "bundle:forBrowser": {
+      "path": "src/tasks/bundle/forBrowser.ts",
+      "handler": "forBrowser"
     }
   },
   "runners": {}

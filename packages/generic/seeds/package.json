@@ -1,6 +1,6 @@
 {
   "name": "@marble-seeds/seeds",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "",
   "main": "dist/bundle.js",
   "scripts": {
@@ -36,10 +36,13 @@
     "test"
   ],
   "dependencies": {
+    "@aws-sdk/client-lambda": "^3.540.0",
+    "@aws-sdk/client-s3": "^3.540.0",
     "@marble-seeds/record-tape": "^0.8.0-rc.5",
     "@marble-seeds/runner": "^0.1.2",
     "@marble-seeds/task": "^1.0.0-rc.8",
     "@types/node": "^20.10.6",
+    "archiver": "^7.0.1",
     "camelcase": "^8.0.0",
     "dotenv": "^16.3.1",
     "esbuild": "^0.20.0",

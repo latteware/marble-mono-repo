@@ -18,9 +18,11 @@ runner.pargeArguments = function (data) {
 }
 
 runner.handler = async function (data) {
+  console.log('Data?', data)
   const { taskName, args }: { taskName: string, args: any } = runner.pargeArguments(data)
 
   const res = await runner.run(taskName, args)
 
+  console.log('->', res)
   return res
 }
